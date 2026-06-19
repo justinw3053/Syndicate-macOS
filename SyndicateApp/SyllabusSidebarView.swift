@@ -13,11 +13,11 @@ struct SyllabusSidebarView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // Elegant, minimalist Sidebar Header
+            // Elegant, custom-designed Sidebar Header
             HStack {
                 Text("SYNDICATE PLAYBOOKS")
                     .font(.system(size: 10, weight: .bold, design: .monospaced))
-                    .foregroundColor(.secondary.opacity(0.8))
+                    .foregroundColor(viewModel.activeTheme == .warpDark || viewModel.activeTheme == .warpCarbon ? .white.opacity(0.6) : Color(red: 0.31, green: 0.38, blue: 0.48))
                 Spacer()
             }
             .padding(.horizontal, 24)
@@ -26,7 +26,7 @@ struct SyllabusSidebarView: View {
             Divider()
                 .background(Color.primary.opacity(0.05))
             
-            // Custom, fully scrollable navigation tree (bypasses default List styling)
+            // Custom, fully scrollable navigation tree
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     
@@ -34,7 +34,7 @@ struct SyllabusSidebarView: View {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Prep Phase (Phase 0)")
                             .font(.system(size: 10, weight: .bold))
-                            .foregroundColor(.secondary.opacity(0.8))
+                            .foregroundColor(viewModel.activeTheme == .warpDark || viewModel.activeTheme == .warpCarbon ? .white.opacity(0.5) : Color(red: 0.38, green: 0.45, blue: 0.55))
                             .padding(.horizontal, 12)
                             .padding(.bottom, 2)
                         
@@ -42,7 +42,8 @@ struct SyllabusSidebarView: View {
                             SidebarRow(
                                 title: lesson.title,
                                 icon: "graduationcap.fill",
-                                isSelected: viewModel.selectedLesson == lesson
+                                isSelected: viewModel.selectedLesson == lesson,
+                                activeTheme: viewModel.activeTheme
                             ) {
                                 viewModel.selectLesson(lesson)
                             }
@@ -53,7 +54,7 @@ struct SyllabusSidebarView: View {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Core Milestones")
                             .font(.system(size: 10, weight: .bold))
-                            .foregroundColor(.secondary.opacity(0.8))
+                            .foregroundColor(viewModel.activeTheme == .warpDark || viewModel.activeTheme == .warpCarbon ? .white.opacity(0.5) : Color(red: 0.38, green: 0.45, blue: 0.55))
                             .padding(.horizontal, 12)
                             .padding(.bottom, 2)
                         
@@ -63,7 +64,8 @@ struct SyllabusSidebarView: View {
                             SidebarRow(
                                 title: lesson.title,
                                 icon: isFinal ? "crown.fill" : (isBrain ? "brain" : "cpu.fill"),
-                                isSelected: viewModel.selectedLesson == lesson
+                                isSelected: viewModel.selectedLesson == lesson,
+                                activeTheme: viewModel.activeTheme
                             ) {
                                 viewModel.selectLesson(lesson)
                             }
@@ -74,7 +76,6 @@ struct SyllabusSidebarView: View {
                 .padding(.horizontal, 12)
             }
         }
-        .frame(minWidth: 260, maxWidth: 340)
         .overlay(
             GeometryReader { geo in
                 HStack {
@@ -94,6 +95,7 @@ struct SidebarRow: View {
     let title: String
     let icon: String
     let isSelected: Bool
+    let activeTheme: AppTheme
     let action: () -> Void
     
     @State private var isHovered = false
@@ -103,12 +105,12 @@ struct SidebarRow: View {
             HStack(spacing: 12) {
                 Image(systemName: icon)
                     .font(.system(size: 12, weight: .semibold))
-                    .foregroundColor(isSelected ? .accentColor : .secondary.opacity(0.7))
+                    .foregroundColor(isSelected ? activeTheme.accentColor : activeTheme.textColor.opacity(0.6))
                     .frame(width: 16, height: 16)
                 
                 Text(title)
                     .font(.system(size: 13, weight: isSelected ? .semibold : .regular))
-                    .foregroundColor(isSelected ? .primary : .primary.opacity(0.8))
+                    .foregroundColor(isSelected ? activeTheme.accentColor : activeTheme.textColor)
                     .lineLimit(1)
                     .truncationMode(.tail)
                 
@@ -118,13 +120,13 @@ struct SidebarRow: View {
             .padding(.horizontal, 12)
             .background(
                 isSelected 
-                ? Color.accentColor.opacity(0.12)
+                ? activeTheme.accentColor.opacity(0.08)
                 : (isHovered ? Color.primary.opacity(0.05) : Color.clear)
             )
             .cornerRadius(8)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(isSelected ? Color.accentColor.opacity(0.25) : Color.clear, lineWidth: 1)
+                    .stroke(isSelected ? activeTheme.accentColor.opacity(0.2) : Color.clear, lineWidth: 1)
             )
             .scaleEffect(isHovered ? 1.015 : 1.0)
             .animation(.spring(response: 0.22, dampingFraction: 0.65), value: isHovered)

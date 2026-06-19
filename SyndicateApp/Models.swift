@@ -2,6 +2,79 @@ import Foundation
 import SwiftUI
 import CryptoKit
 
+// MARK: - Dynamic Theme Preset Enum
+enum AppTheme: String, CaseIterable, Codable {
+    case systemGlass = "Liquid Glass"
+    case warpDark = "Warp Dark"
+    case warpCarbon = "Warp Carbon"
+    case warmEditorial = "Warm Editorial"
+}
+
+extension AppTheme {
+    var accentColor: Color {
+        switch self {
+        case .systemGlass:
+            return Color.accentColor // Native macOS system accent
+        case .warpDark:
+            return Color.cyan
+        case .warpCarbon:
+            return Color.orange
+        case .warmEditorial:
+            return Color(red: 0.39, green: 0.36, blue: 1.0) // Stripe Indigo
+        }
+    }
+    
+    var sidebarBackground: Color {
+        switch self {
+        case .systemGlass:
+            return Color.clear
+        case .warpDark:
+            return Color(red: 0.04, green: 0.05, blue: 0.07)
+        case .warpCarbon:
+            return Color(red: 0.08, green: 0.08, blue: 0.08)
+        case .warmEditorial:
+            return Color(red: 0.95, green: 0.95, blue: 0.94)
+        }
+    }
+    
+    var contentBackground: Color {
+        switch self {
+        case .systemGlass:
+            return Color.clear
+        case .warpDark:
+            return Color(red: 0.06, green: 0.08, blue: 0.11)
+        case .warpCarbon:
+            return Color(red: 0.11, green: 0.11, blue: 0.11)
+        case .warmEditorial:
+            return Color(red: 0.97, green: 0.97, blue: 0.96)
+        }
+    }
+    
+    var textEditorBackground: Color {
+        switch self {
+        case .systemGlass:
+            return Color.clear
+        case .warpDark:
+            return Color(red: 0.03, green: 0.04, blue: 0.06)
+        case .warpCarbon:
+            return Color(red: 0.06, green: 0.06, blue: 0.06)
+        case .warmEditorial:
+            return Color(red: 0.985, green: 0.985, blue: 0.98)
+        }
+    }
+    
+    var textColor: Color {
+        switch self {
+        case .systemGlass:
+            return .primary
+        case .warpDark, .warpCarbon:
+            return .white
+        case .warmEditorial:
+            return Color(red: 0.09, green: 0.14, blue: 0.25)
+        }
+    }
+}
+
 // MARK: - Lesson Models
 struct Lesson: Identifiable, Codable, Hashable {
     let id: String      // Relative path: e.g., "phase_0_prep/playroom_p0_env.ipynb"
@@ -57,6 +130,13 @@ class SyllabusViewModel: ObservableObject {
     @Published var showConflictModal: Bool = false
     @Published var pendingExternalCode: String = ""
     
+    // Dynamic Active Theme (Saves persistently to UserDefaults)
+    @Published var activeTheme: AppTheme = .systemGlass {
+        didSet {
+            UserDefaults.standard.set(activeTheme.rawValue, forKey: "lastSelectedTheme")
+        }
+    }
+    
     // Persistent Subprocess Executor prevents View recreation leaks
     let executor = CodeExecutor()
     
@@ -64,6 +144,14 @@ class SyllabusViewModel: ObservableObject {
     private var saveTask: Task<Void, Never>? = nil
     private var isInitialLoading: Bool = false
     private let workspacePath = "/Users/justin/python-ai-academy"
+    
+    init() {
+        // Restore last selected theme on boot
+        if let lastThemeStr = UserDefaults.standard.string(forKey: "lastSelectedTheme"),
+           let restoredTheme = AppTheme(rawValue: lastThemeStr) {
+            self.activeTheme = restoredTheme
+        }
+    }
     
     func fetchSyllabus() async {
         isLoading = true

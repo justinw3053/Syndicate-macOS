@@ -9,9 +9,9 @@ struct ForgeEditorView: View {
     
     var body: some View {
         VSplitView {
-            // Upper Panel: Discovery Lab Bento Card (Liquid Glass)
+            // Upper Panel: Discovery Lab Bento Card (Dynamic Theme)
             VStack(spacing: 0) {
-                BentoPanel(title: "Discovery Playbook", systemIcon: "safari.fill") {
+                BentoPanel(title: "Discovery Playbook", systemIcon: "safari.fill", activeTheme: viewModel.activeTheme) {
                     if viewModel.activeContent != nil {
                         MarkdownWebView(markdown: viewModel.activeContent?.markdown ?? "")
                     } else {
@@ -36,17 +36,17 @@ struct ForgeEditorView: View {
             // Lower Panel: Code Stage Bento Card & Terminal Console
             VStack(spacing: 0) {
                 VStack(spacing: 12) {
-                    // Bento Code Stage (Liquid Glass)
+                    // Bento Code Stage (Dynamic Theme)
                     VStack(alignment: .leading, spacing: 0) {
                         // Header bar
                         HStack {
                             Image(systemName: "doc.text.fill")
                                 .font(.system(size: 11))
-                                .foregroundColor(.accentColor)
+                                .foregroundColor(viewModel.activeTheme.accentColor)
                             
                             Text("active_lab.py")
                                 .font(.system(size: 10, weight: .bold, design: .monospaced))
-                                .foregroundColor(.secondary)
+                                .foregroundColor(viewModel.activeTheme == .warpDark || viewModel.activeTheme == .warpCarbon ? .white.opacity(0.6) : .secondary)
                             
                             Spacer()
                             
@@ -86,10 +86,10 @@ struct ForgeEditorView: View {
                                 .background(
                                     viewModel.isRunningTests 
                                     ? Color.gray 
-                                    : (isVerifyHovered ? Color.accentColor.opacity(0.9) : Color.accentColor)
+                                    : (isVerifyHovered ? viewModel.activeTheme.accentColor.opacity(0.9) : viewModel.activeTheme.accentColor)
                                 )
                                 .cornerRadius(5)
-                                .shadow(color: isVerifyHovered ? Color.accentColor.opacity(0.25) : .clear, radius: 4, x: 0, y: 2)
+                                .shadow(color: isVerifyHovered ? viewModel.activeTheme.accentColor.opacity(0.25) : .clear, radius: 4, x: 0, y: 2)
                             }
                             .buttonStyle(PlainButtonStyle())
                             .disabled(viewModel.activeContent == nil || viewModel.isRunningTests)
@@ -106,13 +106,13 @@ struct ForgeEditorView: View {
                         Divider()
                             .background(Color.primary.opacity(0.05))
                         
-                        // Code Editor Pane - standard translucent editor background
+                        // Code Editor Pane - standard translucent/solid background
                         TextEditor(text: $viewModel.activeCode)
                             .font(.system(.body, design: .monospaced))
                             .padding(10)
-                            .background(Color.clear) // Full translucency seeps through
+                            .background(viewModel.activeTheme == .systemGlass ? .clear : viewModel.activeTheme.textEditorBackground)
                     }
-                    .background(.thinMaterial)
+                    .background(viewModel.activeTheme == .systemGlass ? AnyView(Color.clear.background(.thinMaterial)) : AnyView(viewModel.activeTheme.contentBackground))
                     .cornerRadius(12)
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
@@ -120,17 +120,17 @@ struct ForgeEditorView: View {
                     )
                     .shadow(color: Color.black.opacity(0.02), radius: 6, x: 0, y: 3)
                     
-                    // High-Density Bento Terminal Console - Glassmorphic terminal
+                    // Warp-Style, High-Contrast Translucent Terminal Console (Hard-edges bug fixed via clipShape!)
                     if !consoleOutput.isEmpty {
                         VStack(spacing: 0) {
                             HStack {
                                 Image(systemName: "terminal.fill")
                                     .font(.system(size: 10))
-                                    .foregroundColor(.green)
+                                    .foregroundColor(viewModel.activeTheme.accentColor)
                                 
-                                Text("Console Logs")
+                                Text("Warp Console")
                                     .font(.system(size: 10, weight: .bold, design: .monospaced))
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(viewModel.activeTheme == .warpDark || viewModel.activeTheme == .warpCarbon ? .white.opacity(0.6) : .secondary)
                                 Spacer()
                                 Button("Clear") {
                                     consoleOutput = ""
@@ -141,26 +141,24 @@ struct ForgeEditorView: View {
                             }
                             .padding(.horizontal, 16)
                             .frame(height: 32)
-                            .background(Color.black.opacity(0.2))
+                            .background(Color.black.opacity(0.15))
                             
                             Divider()
-                                .background(Color.white.opacity(0.05))
+                                .background(Color.white.opacity(0.04))
                             
                             ScrollView {
-                                Text(consoleOutput)
-                                    .font(.system(.caption, design: .monospaced))
-                                    .foregroundColor(.green)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(12)
+                                // Real-time ANSI-colored logs!
+                                AnsiText(text: consoleOutput)
+                                    .padding(14)
                             }
                             .frame(height: 120)
-                            .background(Color.black.opacity(0.4)) // Semi-transparent terminal backing
+                            .background(viewModel.activeTheme == .warpCarbon ? Color(red: 0.05, green: 0.05, blue: 0.05) : Color(red: 0.06, green: 0.08, blue: 0.11))
                         }
-                        .cornerRadius(12)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.primary.opacity(0.08), lineWidth: 1)
+                                .stroke(Color.white.opacity(0.06), lineWidth: 1)
                         )
+                        .clipShape(RoundedRectangle(cornerRadius: 12)) // CRITICAL FIX: Forces perfect, beautiful rounded clipping on all child containers!
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: consoleOutput)
                     }
@@ -203,7 +201,7 @@ struct ForgeEditorView: View {
                 DispatchQueue.main.async {
                     viewModel.isRunningTests = false
                     if success {
-                        self.consoleOutput += "\n\n[SUCCESS] All assertions passed successfully! Playbook solved."
+                        self.consoleOutput += "\n\n\u{001B}[1;32m[SUCCESS] All assertions passed successfully! Playbook solved.\u{001B}[0m"
                         
                         if let selected = viewModel.selectedLesson {
                             Task {
@@ -211,7 +209,7 @@ struct ForgeEditorView: View {
                             }
                         }
                     } else {
-                        self.consoleOutput += "\n\n[FAILURE] Code verification failed. Ask Carl for Socratic guidance."
+                        self.consoleOutput += "\n\n\u{001B}[1;31m[FAILURE] Code verification failed. Ask Carl for Socratic guidance.\u{001B}[0m"
                     }
                 }
             }
@@ -232,15 +230,17 @@ struct ForgeEditorView: View {
     }
 }
 
-// MARK: - Bespoke Bento Panel Container Component (Liquid Glass)
+// MARK: - Bespoke Bento Panel Container Component (Dynamic Glass)
 struct BentoPanel<Content: View>: View {
     let title: String
     let systemIcon: String
+    let activeTheme: AppTheme
     let content: Content
     
-    init(title: String, systemIcon: String, @ViewBuilder content: () -> Content) {
+    init(title: String, systemIcon: String, activeTheme: AppTheme, @ViewBuilder content: () -> Content) {
         self.title = title
         self.systemIcon = systemIcon
+        self.activeTheme = activeTheme
         self.content = content()
     }
     
@@ -250,11 +250,11 @@ struct BentoPanel<Content: View>: View {
             HStack(spacing: 8) {
                 Image(systemName: systemIcon)
                     .font(.system(size: 11, weight: .bold))
-                    .foregroundColor(.accentColor)
+                    .foregroundColor(activeTheme.accentColor)
                 
                 Text(title.uppercased())
                     .font(.system(size: 10, weight: .bold, design: .monospaced))
-                    .foregroundColor(.secondary)
+                    .foregroundColor(activeTheme == .warpDark || activeTheme == .warpCarbon ? .white.opacity(0.6) : .secondary)
                 
                 Spacer()
             }
@@ -269,7 +269,7 @@ struct BentoPanel<Content: View>: View {
             content
                 .frame(maxHeight: .infinity)
         }
-        .background(.thinMaterial)
+        .background(activeTheme == .systemGlass ? AnyView(Color.clear.background(.thinMaterial)) : AnyView(activeTheme.contentBackground))
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)

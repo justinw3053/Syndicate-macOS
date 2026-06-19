@@ -17,13 +17,13 @@ struct AnsiText: View {
         
         for (index, part) in parts.enumerated() {
             if index == 0 {
-                result = result + Text(part)
+                result = Text("\(result)\(Text(part))")
                 continue
             }
             
             // Find the closing 'm' of the ANSI sequence
             guard let mIndex = part.firstIndex(of: "m") else {
-                result = result + Text("\u{001B}[" + part)
+                result = Text("\(result)\(Text("\u{001B}[\(part)"))")
                 continue
             }
             
@@ -59,7 +59,7 @@ struct AnsiText: View {
                 }
             }
             
-            result = result + textRun
+            result = Text("\(result)\(textRun)")
         }
         
         return result

@@ -6,22 +6,47 @@ struct ContentView: View {
     
     var body: some View {
         HSplitView {
-            // Left Column: Syllabus Map Sidebar (Vibrant Liquid Sidebar)
+            // Left Column: Syllabus Map Sidebar
             SyllabusSidebarView(viewModel: syllabusVM)
-                .background(VisualEffectView(material: .sidebar, blendingMode: .behindWindow))
+                .background(
+                    Group {
+                        if syllabusVM.activeTheme == .systemGlass {
+                            VisualEffectView(material: .sidebar, blendingMode: .behindWindow)
+                        } else {
+                            syllabusVM.activeTheme.sidebarBackground
+                        }
+                    }
+                )
             
-            // Center Column: The Forge (Liquid Editor Stage)
+            // Center Column: The Forge (resizable split pane of markdown + code)
             ForgeEditorView(viewModel: syllabusVM)
                 .frame(minWidth: 400, maxWidth: .infinity)
-                .background(VisualEffectView(material: .underWindowBackground, blendingMode: .behindWindow))
+                .background(
+                    Group {
+                        if syllabusVM.activeTheme == .systemGlass {
+                            VisualEffectView(material: .windowBackground, blendingMode: .behindWindow)
+                        } else {
+                            syllabusVM.activeTheme.contentBackground
+                        }
+                    }
+                )
             
-            // Right Column: Socratic Chat Comms Array (Liquid Socratic HUD)
+            // Right Column: Socratic Chat Comms Array
             CommsArrayView(
                 viewModel: chatVM,
                 currentCode: syllabusVM.activeCode,
-                lessonId: syllabusVM.selectedLesson?.id ?? ""
+                lessonId: syllabusVM.selectedLesson?.id ?? "",
+                syllabusVM: syllabusVM
             )
-            .background(VisualEffectView(material: .hudWindow, blendingMode: .behindWindow))
+            .background(
+                Group {
+                    if syllabusVM.activeTheme == .systemGlass {
+                        VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
+                    } else {
+                        syllabusVM.activeTheme.sidebarBackground
+                    }
+                }
+            )
         }
         .frame(minWidth: 1100, minHeight: 700)
         .onAppear {

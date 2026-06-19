@@ -4,32 +4,28 @@ struct CommsArrayView: View {
     @ObservedObject var viewModel: ChatViewModel
     let currentCode: String
     let lessonId: String
+    @ObservedObject var syllabusVM: SyllabusViewModel
     
     @State private var inputText: String = ""
     @State private var isSendHovered = false
     
     var body: some View {
         VStack(spacing: 0) {
-            // Header: Model Selector & Socratic Status Badge
-            HStack {
-                // Socratic Status Node
-                HStack(spacing: 6) {
-                    Circle()
-                        .fill(viewModel.isOllamaOnline ? Color.green : Color.red)
-                        .frame(width: 7, height: 7)
-                        .shadow(color: viewModel.isOllamaOnline ? Color.green.opacity(0.5) : Color.red.opacity(0.5), radius: 3)
-                    
-                    Text(viewModel.isOllamaOnline ? "CARL TUTOR" : "CARL OFFLINE")
-                        .font(.system(size: 9, weight: .bold, design: .monospaced))
-                        .foregroundColor(.secondary)
+            // Header: Theme Selector & Model Selector
+            HStack(spacing: 8) {
+                // Theme Picker (Warp Dark, Carbon, Editorial, Liquid Glass)
+                Picker("", selection: $syllabusVM.activeTheme) {
+                    ForEach(AppTheme.allCases, id: \.self) { theme in
+                        Text(theme.rawValue).tag(theme)
+                    }
                 }
-                .padding(.vertical, 4)
-                .padding(.horizontal, 8)
-                .background(Color.black.opacity(0.04))
-                .cornerRadius(4)
+                .pickerStyle(MenuPickerStyle())
+                .frame(width: 120)
+                .font(.system(size: 10, weight: .bold, design: .monospaced))
                 
                 Spacer()
                 
+                // Local Model Picker
                 Picker("", selection: $viewModel.selectedModel) {
                     ForEach(viewModel.availableModels, id: \.self) { model in
                         Text(model).tag(model)
@@ -46,12 +42,12 @@ struct CommsArrayView: View {
             Divider()
                 .background(Color.primary.opacity(0.05))
             
-            // Message Log - fully transparent to let ContentView's .hudWindow seeps through natively
+            // Message Log
             ScrollViewReader { proxy in
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 14) {
                         ForEach(viewModel.messages) { message in
-                            ChatBubble(message: message)
+                            ChatBubble(messageObj: message, activeTheme: syllabusVM.activeTheme)
                                 .id(message.id)
                         }
                         
@@ -59,7 +55,7 @@ struct CommsArrayView: View {
                             HStack(spacing: 8) {
                                 ProgressView()
                                     .scaleEffect(0.5)
-                                Text(viewModel.statusMessage.isEmpty ? "Carl is formulating inquiry..." : viewModel.statusMessage)
+                                Text(viewModel.statusMessage.isEmpty ? "Carl is formulating Socratic inquiry..." : viewModel.statusMessage)
                                     .font(.system(size: 11, design: .default))
                                     .italic()
                                     .foregroundColor(.secondary)
@@ -82,7 +78,7 @@ struct CommsArrayView: View {
             Divider()
                 .background(Color.primary.opacity(0.05))
             
-            // Chat Input Bar: Floating tactile card
+            // Chat Input Bar
             HStack(spacing: 12) {
                 TextField("Ask Carl about the physics...", text: $inputText, onCommit: sendMessage)
                     .textFieldStyle(PlainTextFieldStyle())
@@ -98,8 +94,8 @@ struct CommsArrayView: View {
                 Button(action: sendMessage) {
                     Image(systemName: "paperplane.fill")
                         .font(.system(size: 14, weight: .bold))
-                        .foregroundColor(inputText.trimmingCharacters(in: .whitespaces).isEmpty ? Color.secondary.opacity(0.4) : .accentColor)
-                        .shadow(color: isSendHovered ? Color.accentColor.opacity(0.2) : .clear, radius: 4)
+                        .foregroundColor(inputText.trimmingCharacters(in: .whitespaces).isEmpty ? Color.secondary.opacity(0.4) : syllabusVM.activeTheme.accentColor)
+                        .shadow(color: isSendHovered ? syllabusVM.activeTheme.accentColor.opacity(0.2) : .clear, radius: 4)
                         .padding(10)
                         .background(isSendHovered ? Color.primary.opacity(0.05) : Color.clear)
                         .cornerRadius(8)
@@ -157,10 +153,7 @@ struct CommsArrayView: View {
 // MARK: - Native macOS Apple Messages Styled Chat Bubble (Liquid Glass)
 struct ChatBubble: View {
     let messageObj: ChatMessage
-    
-    init(message: ChatMessage) {
-        self.messageObj = message
-    }
+    let activeTheme: AppTheme
     
     var body: some View {
         HStack {
@@ -173,16 +166,18 @@ struct ChatBubble: View {
                     .font(.body)
                     .padding(.vertical, 8)
                     .padding(.horizontal, 14)
-                    .foregroundColor(messageObj.isUser ? .white : .primary)
+                    .foregroundColor(messageObj.isUser ? .white : activeTheme.textColor)
                     .background(
                         messageObj.isUser 
-                        ? Color.accentColor
-                        : Color(NSColor.controlBackgroundColor).opacity(0.55) // Semi-transparent system gray bubble
+                        ? activeTheme.accentColor
+                        : (activeTheme == .systemGlass 
+                           ? Color(NSColor.controlBackgroundColor).opacity(0.55) // Translucent system bubble
+                           : activeTheme.textEditorBackground) // Matching solid theme card backing
                     )
                     .cornerRadius(16)
                     .overlay(
                         RoundedRectangle(cornerRadius: 16)
-                            .stroke(messageObj.isUser ? Color.accentColor.opacity(0.2) : Color.primary.opacity(0.04), lineWidth: 1)
+                            .stroke(messageObj.isUser ? activeTheme.accentColor.opacity(0.2) : Color.primary.opacity(0.04), lineWidth: 1)
                     )
                     .shadow(color: Color.black.opacity(0.02), radius: 2, y: 1)
                 
@@ -205,4 +200,3 @@ struct ChatBubble: View {
         return formatter.string(from: date)
     }
 }
-struct Message {}
