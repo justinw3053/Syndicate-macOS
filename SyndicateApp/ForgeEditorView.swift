@@ -106,12 +106,9 @@ struct ForgeEditorView: View {
                         Divider()
                             .background(Color.primary.opacity(0.05))
                         
-                        // Code Editor Pane - standard translucent/solid background
-                        TextEditor(text: $viewModel.activeCode)
-                            .font(.system(.body, design: .monospaced))
-                            .padding(10)
-                            .scrollContentBackground(.hidden) // CRITICAL FIX: Hides the default Cocoa text editor solid background!
-                            .background(viewModel.activeTheme == .systemGlass ? Color.clear : viewModel.activeTheme.textEditorBackground)
+                        // Code Editor Pane - high-performance Python Syntax Highlighting editor!
+                        PythonCodeEditor(text: $viewModel.activeCode, activeTheme: viewModel.activeTheme)
+                            .padding(6)
                     }
                     .background(viewModel.activeTheme == .systemGlass ? AnyView(Color.clear.background(.thinMaterial)) : AnyView(viewModel.activeTheme.contentBackground))
                     .overlay(

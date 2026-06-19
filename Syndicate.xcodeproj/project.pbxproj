@@ -19,6 +19,7 @@
 		080808080808080808080808 /* RAGService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000008 /* RAGService.swift */; };
 		0a0a0a0a0a0a0a0a0a0a0a0a /* MarkdownWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000a /* MarkdownWebView.swift */; };
 		0b0b0b0b0b0b0b0b0b0b0b0b /* AnsiText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000b /* AnsiText.swift */; };
+		0c0c0c0c0c0c0c0c0c0c0c0c /* PythonCodeEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000c /* PythonCodeEditor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		000000000000000000000008 /* RAGService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RAGService.swift; sourceTree = "<group>"; };
 		00000000000000000000000a /* MarkdownWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownWebView.swift; sourceTree = "<group>"; };
 		00000000000000000000000b /* AnsiText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnsiText.swift; sourceTree = "<group>"; };
+		00000000000000000000000c /* PythonCodeEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PythonCodeEditor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 				000000000000000000000008 /* RAGService.swift */,
 				00000000000000000000000a /* MarkdownWebView.swift */,
 				00000000000000000000000b /* AnsiText.swift */,
+				00000000000000000000000c /* PythonCodeEditor.swift */,
 				121212121212121212121212 /* Assets.xcassets */,
 				090909090909090909090909 /* Syndicate.entitlements */,
 			);
@@ -165,6 +168,7 @@
 				080808080808080808080808 /* RAGService.swift in Sources */,
 				0a0a0a0a0a0a0a0a0a0a0a0a /* MarkdownWebView.swift in Sources */,
 				0b0b0b0b0b0b0b0b0b0b0b0b /* AnsiText.swift in Sources */,
+				0c0c0c0c0c0c0c0c0c0c0c0c /* PythonCodeEditor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
