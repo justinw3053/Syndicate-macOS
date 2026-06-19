@@ -60,10 +60,12 @@ def parse_notebook(filepath):
                     starter_code = source_text.strip()
                     assertions = ""
 
-            result["exercises"].append({
-                "starter_code": starter_code,
-                "assertions": assertions
-            })
+            # Only append to exercises if it actually contains assertions (filters out read-only demos!)
+            if assertions.strip():
+                result["exercises"].append({
+                    "starter_code": starter_code,
+                    "assertions": assertions
+                })
 
     result["markdown"] = "\n\n".join(markdown_blocks)
     return result
