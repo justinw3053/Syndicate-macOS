@@ -1,7 +1,7 @@
 {
   "defaultProvider": "ollama",
-  "defaultModel": "gemma4:e4b",
+  "defaultModel": "gemma4:12b-mlx",
   "temperature": 0.7,
-  "systemPrompt": "/home/justin/Space_Station_Academy/.pi/SYSTEM.md",
+  "systemPrompt": "/Users/justin/python-ai-academy/.pi/SYSTEM.md",
   "thinking": "off"
 }
