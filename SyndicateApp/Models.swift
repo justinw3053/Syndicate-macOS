@@ -362,7 +362,7 @@ class ChatViewModel: ObservableObject {
     private var memoryText: String = ""
     
     init() {
-        messages.append(ChatMessage(isUser: false, text: "Welcome to The Forge. I am Carl, your Socratic mentor. Choose a playbook to begin, or ask me any question about the implementation physics."))
+        messages.append(ChatMessage(isUser: false, text: "Welcome to The Forge. I am Carl, your Socratic mentor. Choose a playbook to begin, or ask me any question about the physics."))
         
         // Restore previous selection placeholder (fetchAvailableModels will match it against active local ones)
         if let lastModel = UserDefaults.standard.string(forKey: "lastSelectedModel") {
@@ -463,7 +463,7 @@ class ChatViewModel: ObservableObject {
         // 2. Load the Socratic Memory asynchronously
         let memoryLedger = await loadMemoryLedger()
         
-        // 3. Build Socratic prompt structures (System-Attention Isolated)
+        // 3. Build Socratic prompt guidelines
         let systemPrompt = """
         You are Carl, a brilliant, helpful Socratic tutor guiding an adult developer through the Syndicate 3.0 curriculum.
         Your primary directive: NEVER give out direct solution code!
@@ -494,10 +494,10 @@ class ChatViewModel: ObservableObject {
             let stream: Bool
         }
         
-        // CRITICAL FIX: Pack prompt into distinct role messages rather than single flat user text
+        // --- ELITE SYSTEM-CONVERSATION SEPARATION ARCHITECTURE ---
         var messagesArray: [MessagePayload] = []
         
-        // 1. SYSTEM ROLE MESSAGE: Hard guidelines, memory profile, and local RAG context
+        // 1. DYNAMIC SYSTEM STATE CONTENT (Updated every turn with current RAG and active editor code)
         let systemContent = """
         \(systemPrompt)
         
@@ -506,27 +506,25 @@ class ChatViewModel: ObservableObject {
         
         Offline Documentation Vault (RAG Matches):
         \(formattedRAG)
-        """
-        messagesArray.append(MessagePayload(role: "system", content: systemContent))
         
-        // 2. CHAT HISTORY: Append last 6 messages of context continuity
-        let historyQueue = messages.suffix(7).dropLast() // Exclude the newly added user query
-        for msg in historyQueue {
-            if msg.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { continue }
-            messagesArray.append(MessagePayload(role: msg.isUser ? "user" : "assistant", content: msg.text))
-        }
-        
-        // 3. USER ROLE MESSAGE: Workbook ID, Live editor python workspace code, and user query
-        let userContent = """
-        Curriculum Workbook ID: \(lessonId)
-        My Active Code:
+        Current Workbook: \(lessonId)
+        Student's Active Code Workspace:
         ```python
         \(context)
         ```
-        
-        My Query: \(text)
         """
-        messagesArray.append(MessagePayload(role: "user", content: userContent))
+        messagesArray.append(MessagePayload(role: "system", content: systemContent))
+        
+        // 2. PRISTINE CONVERSATION HISTORY (Clean, readable text-only dialog thread)
+        let historyQueue = messages.suffix(7).dropLast() // Slice history excluding active query
+        for msg in historyQueue {
+            if msg.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { continue }
+            // History remains 100% plain text dialogue to prevent Qwen model confusion
+            messagesArray.append(MessagePayload(role: msg.isUser ? "user" : "assistant", content: msg.text))
+        }
+        
+        // 3. ACTIVE USER QUERY (The fresh prompt sent at system attention level)
+        messagesArray.append(MessagePayload(role: "user", content: text))
         
         let payload = OllamaPayload(model: selectedModel, messages: messagesArray, stream: true)
         request.httpBody = try? JSONEncoder().encode(payload)

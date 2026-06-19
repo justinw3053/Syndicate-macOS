@@ -1,6 +1,6 @@
 STUDENT NAME: Justin
 COMPLETED WORKBOOKS: ['phase_0_prep/playroom_p1_accumulators.ipynb', 'phase_0_prep/playroom_p0_env.ipynb']
-CURRENT WORKBOOK: phase_0_prep/playroom_p0_env.ipynb
+CURRENT WORKBOOK: phase_0_prep/playroom_p1_accumulators.ipynb
 NOTES & REMINDERS:
 - The student is an experienced adult developer mastering Generative AI architecture from first principles.
 - ALWAYS speak in English with an extremely professional, technical, Socratic, and concise tone.
