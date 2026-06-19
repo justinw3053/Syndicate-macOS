@@ -355,7 +355,7 @@ class ChatViewModel: ObservableObject {
     private var memoryText: String = ""
     
     init() {
-        messages.append(ChatMessage(isUser: false, text: "Welcome to The Forge. I am Carl, your Socratic mentor. Choose a playbook to begin, or ask me any question about the physics."))
+        messages.append(ChatMessage(isUser: false, text: "Welcome to The Forge. I am Carl, your Socratic mentor. Choose a playbook to begin, or ask me any question about the implementation physics."))
         
         // Restore previous selection placeholder (fetchAvailableModels will match it against active local ones)
         if let lastModel = UserDefaults.standard.string(forKey: "lastSelectedModel") {
@@ -406,6 +406,15 @@ class ChatViewModel: ObservableObject {
                 self.statusMessage = "Ollama Offline. Launch daemon on 127.0.0.1:11434"
             }
         }
+    }
+    
+    /// Clears the chat log and resets the Socratic tutor state
+    func clearChat() {
+        messages = [
+            ChatMessage(isUser: false, text: "Welcome to The Forge. I am Carl, your Socratic mentor. Choose a playbook to begin, or ask me any question about the implementation physics.")
+        ]
+        isTyping = false
+        statusMessage = ""
     }
     
     /// Unloads a specific model from local Apple Silicon memory instantly

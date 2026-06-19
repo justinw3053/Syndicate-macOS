@@ -42,7 +42,7 @@ struct CommsArrayView: View {
             Divider()
                 .background(Color.primary.opacity(0.05))
             
-            // Message Log
+            // Message Log - fully transparent to let ContentView's .hudWindow seeps through natively
             ScrollViewReader { proxy in
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 14) {
@@ -129,6 +129,15 @@ struct CommsArrayView: View {
         let text = inputText.trimmingCharacters(in: .whitespaces)
         guard !text.isEmpty else { return }
         
+        // INTERCEPT SLASH COMMANDS: /new, /clear, /reset
+        if text.lowercased() == "/new" || text.lowercased() == "/clear" || text.lowercased() == "/reset" {
+            DispatchQueue.main.async {
+                self.inputText = ""
+                viewModel.clearChat()
+            }
+            return
+        }
+        
         // Asynchronously clear input on MainActor to avoid text-field binding retention
         DispatchQueue.main.async {
             self.inputText = ""
@@ -200,3 +209,4 @@ struct ChatBubble: View {
         return formatter.string(from: date)
     }
 }
+struct Message {}
