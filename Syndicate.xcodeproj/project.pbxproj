@@ -18,6 +18,7 @@
 		070707070707070707070707 /* FileWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000007 /* FileWatcher.swift */; };
 		080808080808080808080808 /* RAGService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000008 /* RAGService.swift */; };
 		0a0a0a0a0a0a0a0a0a0a0a0a /* MarkdownWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000a /* MarkdownWebView.swift */; };
+		0b0b0b0b0b0b0b0b0b0b0b0b /* AnsiText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000b /* AnsiText.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		000000000000000000000007 /* FileWatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileWatcher.swift; sourceTree = "<group>"; };
 		000000000000000000000008 /* RAGService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RAGService.swift; sourceTree = "<group>"; };
 		00000000000000000000000a /* MarkdownWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownWebView.swift; sourceTree = "<group>"; };
+		00000000000000000000000b /* AnsiText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnsiText.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +70,7 @@
 				000000000000000000000007 /* FileWatcher.swift */,
 				000000000000000000000008 /* RAGService.swift */,
 				00000000000000000000000a /* MarkdownWebView.swift */,
+				00000000000000000000000b /* AnsiText.swift */,
 				121212121212121212121212 /* Assets.xcassets */,
 				090909090909090909090909 /* Syndicate.entitlements */,
 			);
@@ -161,6 +164,7 @@
 				070707070707070707070707 /* FileWatcher.swift in Sources */,
 				080808080808080808080808 /* RAGService.swift in Sources */,
 				0a0a0a0a0a0a0a0a0a0a0a0a /* MarkdownWebView.swift in Sources */,
+				0b0b0b0b0b0b0b0b0b0b0b0b /* AnsiText.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
