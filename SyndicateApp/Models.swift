@@ -130,6 +130,9 @@ class SyllabusViewModel: ObservableObject {
     @Published var showConflictModal: Bool = false
     @Published var pendingExternalCode: String = ""
     
+    // Multi-Exercise navigation state
+    @Published var selectedExerciseIndex: Int = 0
+    
     // Dynamic Active Theme (Saves persistently to UserDefaults)
     @Published var activeTheme: AppTheme = .systemGlass {
         didSet {
@@ -185,6 +188,7 @@ class SyllabusViewModel: ObservableObject {
         self.isInitialLoading = true
         self.activeCode = ""
         self.lastWrittenHash = ""
+        self.selectedExerciseIndex = 0 // Reset to first exercise on workbook switch
         self.saveTask?.cancel() // CRITICAL FIX: Kill any pending auto-saves from the previous lesson
         self.saveTask = nil
         self.fileWatcher.stopWatching()
@@ -207,6 +211,7 @@ class SyllabusViewModel: ObservableObject {
             self.activeContent = content
             
             self.isInitialLoading = true
+            self.selectedExerciseIndex = 0
             if let firstExercise = content.exercises.first {
                 let starter = firstExercise.starter_code
                 self.activeCode = starter
@@ -233,6 +238,28 @@ class SyllabusViewModel: ObservableObject {
             self.errorMessage = "Failed to load lesson content."
             self.isInitialLoading = false
         }
+    }
+    
+    // MARK: - Multi-Exercise Selector (Non-blocking I/O)
+    func selectExercise(index: Int) {
+        guard let content = activeContent, index >= 0 && index < content.exercises.count else { return }
+        
+        // Terminate any active process running on the previous exercise
+        self.executor.terminateActiveProcess()
+        
+        self.selectedExerciseIndex = index
+        self.isInitialLoading = true
+        
+        let starter = content.exercises[index].starter_code
+        self.activeCode = starter
+        
+        // Write selected exercise code to active_lab.py
+        let activeLabPath = "\(workspacePath)/active_lab.py"
+        DispatchQueue.global(qos: .background).async {
+            try? starter.write(toFile: activeLabPath, atomically: true, encoding: .utf8)
+        }
+        self.lastWrittenHash = sha256(starter)
+        self.isInitialLoading = false
     }
     
     // MARK: - Asynchronous Auto-Save Debouncer (Non-blocking I/O)

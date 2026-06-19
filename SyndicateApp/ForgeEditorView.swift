@@ -48,6 +48,22 @@ struct ForgeEditorView: View {
                                 .font(.system(size: 10, weight: .bold, design: .monospaced))
                                 .foregroundColor(viewModel.activeTheme == .warpDark || viewModel.activeTheme == .warpCarbon ? .white.opacity(0.6) : .secondary)
                             
+                            // Multi-Exercise Sub-Selector dropdown (revealed only when workbook has multiple exercises)
+                            if let content = viewModel.activeContent, content.exercises.count > 1 {
+                                Picker("", selection: Binding(
+                                    get: { viewModel.selectedExerciseIndex },
+                                    set: { viewModel.selectExercise(index: $0) }
+                                )) {
+                                    ForEach(0..<content.exercises.count, id: \.self) { index in
+                                        Text("Exercise \(index + 1) of \(content.exercises.count)").tag(index)
+                                    }
+                                }
+                                .pickerStyle(MenuPickerStyle())
+                                .frame(width: 140)
+                                .font(.system(size: 10, weight: .bold, design: .monospaced))
+                                .padding(.leading, 8)
+                            }
+                            
                             Spacer()
                             
                             Button(action: resetCode) {
@@ -170,8 +186,8 @@ struct ForgeEditorView: View {
     }
     
     func resetCode() {
-        if let content = viewModel.activeContent, let first = content.exercises.first {
-            viewModel.activeCode = first.starter_code
+        if let content = viewModel.activeContent, viewModel.selectedExerciseIndex < content.exercises.count {
+            viewModel.activeCode = content.exercises[viewModel.selectedExerciseIndex].starter_code
         }
     }
     
@@ -181,8 +197,9 @@ struct ForgeEditorView: View {
         consoleOutput = "Spawning isolated Python verification subprocess...\n\n"
         viewModel.isRunningTests = true
         
-        // Grab assertions for the active exercise
-        let assertions = content.exercises.map { $0.assertions }.joined(separator: "\n")
+        // Grab assertions specifically for the selected exercise!
+        let activeExercise = content.exercises[viewModel.selectedExerciseIndex]
+        let assertions = activeExercise.assertions
         
         // Use persistent viewModel.executor instead of a localized struct member
         viewModel.executor.execute(
