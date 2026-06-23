@@ -3,13 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
+
+		ABCD00010000000000000000 /* StateEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABCD00020000000000000000 /* StateEvents.swift */; };
+		ABCD00030000000000000000 /* StateReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABCD00040000000000000000 /* StateReceiver.swift */; };
 		010101010101010101010101 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000000 /* ContentView.swift */; };
-		131313131313131313131313 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 121212121212121212121212 /* Assets.xcassets */; };
-		F1F1F1F1F1F1F1F1F1F1F1F1 /* SyndicateApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFFFFFFFFFFFFFFFFFFFFFF /* SyndicateApp.swift */; };
 		020202020202020202020202 /* SyllabusSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000002 /* SyllabusSidebarView.swift */; };
 		030303030303030303030303 /* ForgeEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000003 /* ForgeEditorView.swift */; };
 		040404040404040404040404 /* CommsArrayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000004 /* CommsArrayView.swift */; };
@@ -20,14 +21,15 @@
 		0a0a0a0a0a0a0a0a0a0a0a0a /* MarkdownWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000a /* MarkdownWebView.swift */; };
 		0b0b0b0b0b0b0b0b0b0b0b0b /* AnsiText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000b /* AnsiText.swift */; };
 		0c0c0c0c0c0c0c0c0c0c0c0c /* PythonCodeEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000c /* PythonCodeEditor.swift */; };
+		131313131313131313131313 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 121212121212121212121212 /* Assets.xcassets */; };
+		F1F1F1F1F1F1F1F1F1F1F1F1 /* SyndicateApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFFFFFFFFFFFFFFFFFFFFFF /* SyndicateApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+
+		ABCD00020000000000000000 /* StateEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateEvents.swift; sourceTree = "<group>"; };
+		ABCD00040000000000000000 /* StateReceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateReceiver.swift; sourceTree = "<group>"; };
 		000000000000000000000000 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		121212121212121212121212 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		555555555555555555555555 /* Syndicate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Syndicate.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		FFFFFFFFFFFFFFFFFFFFFFFF /* SyndicateApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyndicateApp.swift; sourceTree = "<group>"; };
-		090909090909090909090909 /* Syndicate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Syndicate.entitlements; sourceTree = "<group>"; };
 		000000000000000000000002 /* SyllabusSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyllabusSidebarView.swift; sourceTree = "<group>"; };
 		000000000000000000000003 /* ForgeEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgeEditorView.swift; sourceTree = "<group>"; };
 		000000000000000000000004 /* CommsArrayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommsArrayView.swift; sourceTree = "<group>"; };
@@ -38,6 +40,10 @@
 		00000000000000000000000a /* MarkdownWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownWebView.swift; sourceTree = "<group>"; };
 		00000000000000000000000b /* AnsiText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnsiText.swift; sourceTree = "<group>"; };
 		00000000000000000000000c /* PythonCodeEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PythonCodeEditor.swift; sourceTree = "<group>"; };
+		090909090909090909090909 /* Syndicate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Syndicate.entitlements; sourceTree = "<group>"; };
+		121212121212121212121212 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		555555555555555555555555 /* Syndicate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Syndicate.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FFFFFFFFFFFFFFFFFFFFFFFF /* SyndicateApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyndicateApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,7 +57,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		222222222222222222222222 /* Main Group */ = {
+		222222222222222222222222 = {
 			isa = PBXGroup;
 			children = (
 				999999999999999999999991 /* SyndicateApp */,
@@ -59,9 +65,19 @@
 			);
 			sourceTree = "<group>";
 		};
+		333333333333333333333333 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				555555555555555555555555 /* Syndicate.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		999999999999999999999991 /* SyndicateApp */ = {
 			isa = PBXGroup;
 			children = (
+				ABCD00020000000000000000 /* StateEvents.swift */,
+				ABCD00040000000000000000 /* StateReceiver.swift */,
 				FFFFFFFFFFFFFFFFFFFFFFFF /* SyndicateApp.swift */,
 				000000000000000000000000 /* ContentView.swift */,
 				000000000000000000000002 /* SyllabusSidebarView.swift */,
@@ -80,14 +96,6 @@
 			path = SyndicateApp;
 			sourceTree = "<group>";
 		};
-		333333333333333333333333 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				555555555555555555555555 /* Syndicate.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -98,6 +106,7 @@
 				666666666666666666666666 /* Sources */,
 				777777777777777777777777 /* Frameworks */,
 				888888888888888888888888 /* Resources */,
+				D0F6DA372FE824CA004FD6CC /* Build Python Runtime */,
 			);
 			buildRules = (
 			);
@@ -131,7 +140,7 @@
 				en,
 				Base,
 			);
-			mainGroup = 222222222222222222222222 /* Main Group */;
+			mainGroup = 222222222222222222222222;
 			productRefGroup = 333333333333333333333333 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -152,11 +161,34 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		D0F6DA372FE824CA004FD6CC /* Build Python Runtime */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Python Runtime";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nbash \"${SRCROOT}/scripts/build_python_runtime.sh\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		666666666666666666666666 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ABCD00010000000000000000 /* StateEvents.swift in Sources */,
+				ABCD00030000000000000000 /* StateReceiver.swift in Sources */,
 				F1F1F1F1F1F1F1F1F1F1F1F1 /* SyndicateApp.swift in Sources */,
 				010101010101010101010101 /* ContentView.swift in Sources */,
 				020202020202020202020202 /* SyllabusSidebarView.swift in Sources */,
@@ -295,13 +327,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "SyndicateApp/Syndicate.entitlements";
+				CODE_SIGN_ENTITLEMENTS = SyndicateApp/Syndicate.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_ASSETS = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_KEY_NSPrincipalClass" = NSApplication;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -318,13 +350,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "SyndicateApp/Syndicate.entitlements";
+				CODE_SIGN_ENTITLEMENTS = SyndicateApp/Syndicate.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_ASSETS = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_KEY_NSPrincipalClass" = NSApplication;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",

@@ -35,13 +35,12 @@ def stream_chat(message, context, lesson_id=''):
     
     # For local LLMs (like Gemma/Qwen) that sometimes ignore system prompts,
     # we inject a high-attention reminder directly at the front of the user message.
-    # Enforces Greek Socratic dialogue but strictly English code generation/variables/comments.
+    # Enforces professional English Socratic dialogue and strict anti-cheat rules.
     reminder_prefix = (
-        "[INSTRUCTION: Είσαι ο ψηφιακός βοηθός Pi Agent. Μίλα ΑΠΟΚΛΕΙΣΤΙΚΑ στα Ελληνικά με εξαιρετικά φιλικό και υποστηρικτικό τόνο. "
+        "[INSTRUCTION: You are Carl, the student's Socratic mentor. "
         "Strict rule: NEVER write or display the ready Python solution or more than 2 consecutive lines of ready code. "
-        "Force Leonidas to write his variables, syntax, comments, and solutions STRICTLY in English. "
-        "Guide the student Socratically using simple analogies, pseudocode, or guiding questions in Greek. "
-        f"Student's Monaco editor code: {context or 'None'}]\n\n"
+        "Guide the student Socratically using simple analogies, pseudocode, or guiding questions in English. "
+        f"Student's active editor code: {context or 'None'}]\n\n"
     )
     
     messages = [

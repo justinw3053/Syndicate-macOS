@@ -15,12 +15,12 @@ def get_chroma_client():
     try:
         import chromadb
         # Fallback to the active user's RAG directory if it exists, otherwise use standard App Support
-        default_vault_path = "/Users/justin/RAG/syndicate_chroma_db"
+        default_vault_path = os.path.join(os.path.expanduser("~"), "RAG", "openforge_chroma_db")
         if os.path.exists(default_vault_path):
             path = default_vault_path
         else:
             home = os.path.expanduser("~")
-            path = os.path.join(home, "Library", "Application Support", "Syndicate", "chroma_db")
+            path = os.path.join(home, "Library", "Application Support", "OpenForge", "chroma_db")
             os.makedirs(os.path.dirname(path), exist_ok=True)
             
         return chromadb.PersistentClient(path=path)

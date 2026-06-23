@@ -52,6 +52,19 @@ struct ContentView: View {
         .onAppear {
             // Eagerly initialize RAGService and auto-spawn background processes (Flask + Daemon) on app boot!
             _ = RAGService.shared
+            _ = StateReceiver.shared // Eagerly boot UDF Receiver
+            
+            // Wire up UDF Event Bus Actions
+            StateReceiver.shared.onLessonCompleted = { lessonId in
+                Task {
+                    await syllabusVM.fetchSyllabus()
+                }
+            }
+            StateReceiver.shared.onThemeChanged = { themeName in
+                if let newTheme = AppTheme(rawValue: themeName) {
+                    syllabusVM.activeTheme = newTheme
+                }
+            }
             
             Task {
                 // Give the background Flask server a safe 500ms moment to bind to port 5050

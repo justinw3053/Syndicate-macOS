@@ -3,19 +3,11 @@ import SwiftUI
 struct SyllabusSidebarView: View {
     @ObservedObject var viewModel: SyllabusViewModel
     
-    var prepLessons: [Lesson] {
-        viewModel.lessons.filter { $0.id.contains("phase_0_prep") }
-    }
-    
-    var coreLessons: [Lesson] {
-        viewModel.lessons.filter { !$0.id.contains("phase_0_prep") }
-    }
-    
     var body: some View {
         VStack(spacing: 0) {
             // Elegant, custom-designed Sidebar Header
             HStack {
-                Text("SYNDICATE PLAYBOOKS")
+                Text("SYLLABUS MAP")
                     .font(.system(size: 10, weight: .bold, design: .monospaced))
                     .foregroundColor(viewModel.activeTheme == .warpDark || viewModel.activeTheme == .warpCarbon ? .white.opacity(0.6) : Color(red: 0.31, green: 0.38, blue: 0.48))
                 Spacer()
@@ -28,47 +20,15 @@ struct SyllabusSidebarView: View {
             
             // Custom, fully scrollable navigation tree
             ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    
-                    // Section 1: Prep Phase
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("Prep Phase (Phase 0)")
-                            .font(.system(size: 10, weight: .bold))
-                            .foregroundColor(viewModel.activeTheme == .warpDark || viewModel.activeTheme == .warpCarbon ? .white.opacity(0.5) : Color(red: 0.38, green: 0.45, blue: 0.55))
-                            .padding(.horizontal, 12)
-                            .padding(.bottom, 2)
-                        
-                        ForEach(prepLessons) { lesson in
-                            SidebarRow(
-                                title: lesson.title,
-                                icon: "graduationcap.fill",
-                                isSelected: viewModel.selectedLesson == lesson,
-                                activeTheme: viewModel.activeTheme
-                            ) {
-                                viewModel.selectLesson(lesson)
-                            }
-                        }
-                    }
-                    
-                    // Section 2: Core Curriculum
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("Core Milestones")
-                            .font(.system(size: 10, weight: .bold))
-                            .foregroundColor(viewModel.activeTheme == .warpDark || viewModel.activeTheme == .warpCarbon ? .white.opacity(0.5) : Color(red: 0.38, green: 0.45, blue: 0.55))
-                            .padding(.horizontal, 12)
-                            .padding(.bottom, 2)
-                        
-                        ForEach(coreLessons) { lesson in
-                            let isFinal = lesson.id.contains("phase_10")
-                            let isBrain = lesson.id.contains("phase_8") || lesson.id.contains("phase_9")
-                            SidebarRow(
-                                title: lesson.title,
-                                icon: isFinal ? "crown.fill" : (isBrain ? "brain" : "cpu.fill"),
-                                isSelected: viewModel.selectedLesson == lesson,
-                                activeTheme: viewModel.activeTheme
-                            ) {
-                                viewModel.selectLesson(lesson)
-                            }
+                VStack(alignment: .leading, spacing: 6) {
+                    ForEach(viewModel.lessons) { lesson in
+                        SidebarRow(
+                            title: lesson.title,
+                            icon: "terminal.fill",
+                            isSelected: viewModel.selectedLesson == lesson,
+                            activeTheme: viewModel.activeTheme
+                        ) {
+                            viewModel.selectLesson(lesson)
                         }
                     }
                 }

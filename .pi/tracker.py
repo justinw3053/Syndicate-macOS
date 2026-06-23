@@ -13,8 +13,8 @@ def update_progress(lesson_id):
             
         updated_lines = []
         for line in lines:
-            # Check for English and legacy Greek keywords
-            if line.startswith("COMPLETED WORKBOOKS:") or line.startswith("ΟΛΟΚΛΗΡΩΜΕΝΑ WORKBOOKS:"):
+            # Check for tracker keywords
+            if line.startswith("COMPLETED WORKBOOKS:"):
                 # Extract completed list
                 parts = line.split(":", 1)
                 list_str = parts[1].strip()
@@ -32,7 +32,7 @@ def update_progress(lesson_id):
                     completed_list.append(lesson_id)
                 updated_lines.append(f"COMPLETED WORKBOOKS: {completed_list}\n")
                 
-            elif line.startswith("CURRENT WORKBOOK:") or line.startswith("ΤΡΕΧΟΝ WORKBOOK:"):
+            elif line.startswith("CURRENT WORKBOOK:"):
                 # Set the current active lesson/task dynamically
                 updated_lines.append(f"CURRENT WORKBOOK: {lesson_id}\n")
             else:

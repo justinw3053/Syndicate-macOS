@@ -1,0 +1,729 @@
+version: 2.0.0
+architecture: uncapped_dag
+tiers:
+- id: tier_0_bootstrap
+  name: 'Tier 0: Python Core Foundations (The Sandbox)'
+  description: Build muscle memory for core Python syntax, variables, conditionals,
+    loops, and functions.
+  nodes:
+  - id: node_basic_grammar
+    name: Grammar, Variables & Assignments
+    prerequisites: []
+    drills:
+    - id: kata_gram_01
+      type: kata
+      description: String concatenation and templating.
+      exercise_file: drills/ex_gram_01.py
+      test_file: drills/test_gram_01.py
+      prd_file: drills/playbook_gram_01.md
+    - id: kata_gram_02
+      type: kata
+      description: List manipulation and insertion.
+      exercise_file: drills/ex_gram_02.py
+      test_file: drills/test_gram_02.py
+      prd_file: drills/playbook_gram_02.md
+    - id: kata_gram_03
+      type: kata
+      description: Config dictionary lookup and settings.
+      exercise_file: drills/ex_gram_03.py
+      test_file: drills/test_gram_03.py
+      prd_file: drills/playbook_gram_03.md
+    - id: kata_gram_04
+      type: kata
+      description: Dynamic type casting and protection.
+      exercise_file: drills/ex_gram_04.py
+      test_file: drills/test_gram_04.py
+      prd_file: drills/playbook_gram_04.md
+    - id: kata_gram_05
+      type: kata
+      description: Boolean logic and bound checking.
+      exercise_file: drills/ex_gram_05.py
+      test_file: drills/test_gram_05.py
+      prd_file: drills/playbook_gram_05.md
+  - id: node_basic_control_flow
+    name: Control Flow & Accumulator Logic
+    prerequisites:
+    - node_basic_grammar
+    drills:
+    - id: kata_flow_01_basic
+      type: kata
+      description: Dynamic Conditional Gates.
+      exercise_file: drills/ex_flow_01.py
+      test_file: drills/test_flow_01.py
+      prd_file: drills/playbook_flow_01.md
+    - id: kata_flow_02_basic
+      type: kata
+      description: Sum Accumulator Loops.
+      exercise_file: drills/ex_flow_02.py
+      test_file: drills/test_flow_02.py
+      prd_file: drills/playbook_flow_02.md
+    - id: kata_flow_03_basic
+      type: kata
+      description: Step Limits & While Guards.
+      exercise_file: drills/ex_flow_03.py
+      test_file: drills/test_flow_03.py
+      prd_file: drills/playbook_flow_03.md
+    - id: kata_flow_04_basic
+      type: kata
+      description: Filtering collections with criteria.
+      exercise_file: drills/ex_flow_04.py
+      test_file: drills/test_flow_04.py
+      prd_file: drills/playbook_flow_04.md
+    - id: kata_flow_05_basic
+      type: kata
+      description: Nested counting across grid structures.
+      exercise_file: drills/ex_flow_05.py
+      test_file: drills/test_flow_05.py
+      prd_file: drills/playbook_flow_05.md
+  - id: node_basic_functions
+    name: Function Interfaces & Practical Mechanics
+    prerequisites:
+    - node_basic_control_flow
+    drills:
+    - id: kata_func_01_basic
+      type: kata
+      description: Defining and returning computation.
+      exercise_file: drills/ex_func_01.py
+      test_file: drills/test_func_01.py
+      prd_file: drills/playbook_func_01.md
+    - id: kata_func_02_basic
+      type: kata
+      description: Providing default fallback parameters.
+      exercise_file: drills/ex_func_02.py
+      test_file: drills/test_func_02.py
+      prd_file: drills/playbook_func_02.md
+    - id: kata_func_03_basic
+      type: kata
+      description: Iterating dictionary pairs as list flags.
+      exercise_file: drills/ex_func_03.py
+      test_file: drills/test_func_03.py
+      prd_file: drills/playbook_func_03.md
+    - id: kata_func_04_basic
+      type: kata
+      description: Replacing values across log arrays.
+      exercise_file: drills/ex_func_04.py
+      test_file: drills/test_func_04.py
+      prd_file: drills/playbook_func_04.md
+    - id: boss_muscle_memory
+      type: boss_fight
+      description: The ultimate syntax validation challenge.
+      exercise_file: drills/boss_syntax.py
+      test_file: drills/test_boss_syntax.py
+      prd_file: drills/prd_boss_syntax.md
+- id: tier_1_toolbox
+  name: 'Tier 1: Pragmatic Software Engineering (The Toolbox)'
+  description: Master string manipulation, secure file operations, JSON serialization,
+    custom algorithmic sorting, and network API connections.
+  nodes:
+  - id: node_string_craft
+    name: String Craft & Text Sanitization
+    prerequisites:
+    - node_basic_functions
+    drills:
+    - id: kata_str_01
+      type: kata
+      description: Trimming and padding string formats.
+      exercise_file: drills/ex_str_01.py
+      test_file: drills/test_str_01.py
+      prd_file: drills/playbook_str_01.md
+    - id: kata_str_02
+      type: kata
+      description: Splitting text by custom delimiters.
+      exercise_file: drills/ex_str_02.py
+      test_file: drills/test_str_02.py
+      prd_file: drills/playbook_str_02.md
+    - id: kata_str_03
+      type: kata
+      description: Replacing substring mapping values.
+      exercise_file: drills/ex_str_03.py
+      test_file: drills/test_str_03.py
+      prd_file: drills/playbook_str_03.md
+    - id: kata_str_04
+      type: kata
+      description: Joining string list sequences with glue.
+      exercise_file: drills/ex_str_04.py
+      test_file: drills/test_str_04.py
+      prd_file: drills/playbook_str_04.md
+    - id: kata_str_05
+      type: kata
+      description: Extracting dynamic substring slices safely.
+      exercise_file: drills/ex_str_05.py
+      test_file: drills/test_str_05.py
+      prd_file: drills/playbook_str_05.md
+  - id: node_file_io
+    name: File Systems & JSON Serialization
+    prerequisites:
+    - node_string_craft
+    drills:
+    - id: kata_file_01
+      type: kata
+      description: Reading local text files securely.
+      exercise_file: drills/ex_file_01.py
+      test_file: drills/test_file_01.py
+      prd_file: drills/playbook_file_01.md
+    - id: kata_file_02
+      type: kata
+      description: Writing telemetry logs to disk.
+      exercise_file: drills/ex_file_02.py
+      test_file: drills/test_file_02.py
+      prd_file: drills/playbook_file_02.md
+    - id: kata_file_03
+      type: kata
+      description: Serializing dictionaries to JSON strings.
+      exercise_file: drills/ex_file_03.py
+      test_file: drills/test_file_03.py
+      prd_file: drills/playbook_file_03.md
+    - id: kata_file_04
+      type: kata
+      description: Loading JSON strings back to dictionaries.
+      exercise_file: drills/ex_file_04.py
+      test_file: drills/test_file_04.py
+      prd_file: drills/playbook_file_04.md
+    - id: kata_file_05
+      type: kata
+      description: Validating dynamic folder paths.
+      exercise_file: drills/ex_file_05.py
+      test_file: drills/test_file_05.py
+      prd_file: drills/playbook_file_05.md
+  - id: node_algorithmic_sorting
+    name: Algorithmic Logic & Custom Sorting
+    prerequisites:
+    - node_file_io
+    drills:
+    - id: kata_sort_01
+      type: kata
+      description: Sorting float lists ascending and descending.
+      exercise_file: drills/ex_sort_01.py
+      test_file: drills/test_sort_01.py
+      prd_file: drills/playbook_sort_01.md
+    - id: kata_sort_02
+      type: kata
+      description: Sorting dictionaries by key value.
+      exercise_file: drills/ex_sort_02.py
+      test_file: drills/test_sort_02.py
+      prd_file: drills/playbook_sort_02.md
+    - id: kata_sort_03
+      type: kata
+      description: Extracting the largest element value index.
+      exercise_file: drills/ex_sort_03.py
+      test_file: drills/test_sort_03.py
+      prd_file: drills/playbook_sort_03.md
+    - id: kata_sort_04
+      type: kata
+      description: Sorting token list strings by string length.
+      exercise_file: drills/ex_sort_04.py
+      test_file: drills/test_sort_04.py
+      prd_file: drills/playbook_sort_04.md
+    - id: kata_sort_05
+      type: kata
+      description: Filtering and sorting config scores combined.
+      exercise_file: drills/ex_sort_05.py
+      test_file: drills/test_sort_05.py
+      prd_file: drills/playbook_sort_05.md
+  - id: node_network_apis
+    name: Network Boundaries & External APIs
+    prerequisites:
+    - node_algorithmic_sorting
+    drills:
+    - id: kata_net_01
+      type: kata
+      description: Performing secure GET network requests.
+      exercise_file: drills/ex_net_01.py
+      test_file: drills/test_net_01.py
+      prd_file: drills/playbook_net_01.md
+    - id: kata_net_02
+      type: kata
+      description: Posting JSON request payloads securely.
+      exercise_file: drills/ex_net_02.py
+      test_file: drills/test_net_02.py
+      prd_file: drills/playbook_net_02.md
+    - id: kata_net_03
+      type: kata
+      description: Validating API HTTP response status codes.
+      exercise_file: drills/ex_net_03.py
+      test_file: drills/test_net_03.py
+      prd_file: drills/playbook_net_03.md
+    - id: kata_net_04
+      type: kata
+      description: Managing API connection timeout barriers.
+      exercise_file: drills/ex_net_04.py
+      test_file: drills/test_net_04.py
+      prd_file: drills/playbook_net_04.md
+    - id: kata_net_05
+      type: kata
+      description: Mocking external server requests safely.
+      exercise_file: drills/ex_net_05.py
+      test_file: drills/test_net_05.py
+      prd_file: drills/playbook_net_05.md
+    - id: boss_scraper
+      type: boss_fight
+      description: The Local Document Scraper.
+      exercise_file: drills/boss_scraper.py
+      test_file: drills/test_boss_scraper.py
+      prd_file: drills/prd_boss_scraper.md
+- id: tier_1_physics
+  name: 'Tier 2: The Physics (Advanced Systems)'
+  description: Memory pointers, execution scoping, and mutability.
+  nodes:
+  - id: node_reference_mechanics
+    name: Reference Mechanics & Mutability
+    prerequisites:
+    - boss_scraper
+    drills:
+    - id: kata_ptr_01
+      type: kata
+      description: Isolate shallow copy reference leakage.
+      exercise_file: drills/ex_ptr_01.py
+      test_file: drills/test_ptr_01.py
+      prd_file: drills/playbook_kata_ptr_01.md
+    - id: kata_ptr_02
+      type: kata
+      description: Implement deep copy decoupling.
+      exercise_file: drills/ex_ptr_02.py
+      test_file: drills/test_ptr_02.py
+      prd_file: drills/playbook_kata_ptr_02.md
+    - id: boss_state_manager
+      type: boss_fight
+      description: Build a leak-proof configuration state manager from a PRD.
+      exercise_file: drills/boss_state.py
+      test_file: drills/test_boss_state.py
+      prd_file: drills/prd_boss_state.md
+  - id: node_control_flow
+    name: Advanced Control Flow
+    prerequisites:
+    - node_reference_mechanics
+    drills:
+    - id: kata_type_01
+      type: kata
+      description: Dynamic Type Checking (isinstance).
+      exercise_file: drills/ex_type_01.py
+      test_file: drills/test_type_01.py
+      prd_file: drills/playbook_kata_type_01.md
+    - id: kata_flow_01
+      type: kata
+      description: Fix the Static Loop Trap.
+      exercise_file: drills/ex_accumulator_01.py
+      test_file: drills/test_accumulator_01.py
+      prd_file: drills/playbook_kata_flow_01.md
+    - id: kata_flow_02
+      type: kata
+      description: Implement the Factorial Accumulator.
+      exercise_file: drills/ex_accumulator_02.py
+      test_file: drills/test_accumulator_02.py
+      prd_file: drills/playbook_kata_flow_02.md
+    - id: kata_flow_03
+      type: kata
+      description: Implement the String Token Accumulator.
+      exercise_file: drills/ex_accumulator_03.py
+      test_file: drills/test_accumulator_03.py
+      prd_file: drills/playbook_kata_flow_03.md
+    - id: kata_flow_04
+      type: kata
+      description: Overlapping Gates.
+      exercise_file: drills/ex_flow_04.py
+      test_file: drills/test_flow_04.py
+      prd_file: drills/playbook_kata_flow_04.md
+    - id: kata_flow_05
+      type: kata
+      description: Multi-Criteria Dispatcher.
+      exercise_file: drills/ex_flow_05.py
+      test_file: drills/test_flow_05.py
+      prd_file: drills/playbook_kata_flow_05.md
+    - id: boss_truthiness
+      type: boss_fight
+      description: Boolean Truthiness Safeguards.
+      exercise_file: drills/boss_truthiness.py
+      test_file: drills/test_boss_truthiness.py
+      prd_file: drills/prd_boss_truthiness.md
+    - id: boss_dual_bounds
+      type: boss_fight
+      description: Dual Bounds Tracking (Min/Max Logits).
+      exercise_file: drills/boss_dual_bounds.py
+      test_file: drills/test_boss_dual_bounds.py
+      prd_file: drills/prd_boss_dual_bounds.md
+  - id: node_data_structures
+    name: Data Structures & Nested Schemas
+    prerequisites:
+    - node_control_flow
+    drills:
+    - id: kata_dict_00_get
+      type: kata
+      description: Safe Dictionary Access (The .get method).
+      exercise_file: drills/ex_dict_00_get.py
+      test_file: drills/test_dict_00_get.py
+      prd_file: drills/playbook_kata_dict_00_get.md
+    - id: kata_dict_01
+      type: kata
+      description: Deep Dictionary Extraction.
+      exercise_file: drills/ex_dict_01.py
+      test_file: drills/test_dict_01.py
+      prd_file: drills/playbook_kata_dict_01.md
+    - id: kata_dict_02
+      type: kata
+      description: Dictionary Comprehensions.
+      exercise_file: drills/ex_dict_02.py
+      test_file: drills/test_dict_02.py
+      prd_file: drills/playbook_kata_dict_02.md
+    - id: boss_schema
+      type: boss_fight
+      description: Schema Validation Contract.
+      exercise_file: drills/boss_schema.py
+      test_file: drills/test_boss_schema.py
+      prd_file: drills/prd_boss_schema.md
+  - id: node_functional_scoping
+    name: Functions & Scope
+    prerequisites:
+    - node_data_structures
+    drills:
+    - id: kata_func_01
+      type: kata
+      description: The Void Scope.
+      exercise_file: drills/ex_func_01.py
+      test_file: drills/test_func_01.py
+      prd_file: drills/playbook_kata_func_01.md
+    - id: kata_func_02
+      type: kata
+      description: Pure Cumulative Sum.
+      exercise_file: drills/ex_func_02.py
+      test_file: drills/test_func_02.py
+      prd_file: drills/playbook_kata_func_02.md
+    - id: kata_func_03
+      type: kata
+      description: Mutable Default Argument Trap.
+      exercise_file: drills/ex_func_03.py
+      test_file: drills/test_func_03.py
+      prd_file: drills/playbook_kata_func_03.md
+    - id: boss_closure
+      type: boss_fight
+      description: Stateful Cost Tracker (Closure Factory).
+      exercise_file: drills/boss_closure.py
+      test_file: drills/test_boss_closure.py
+      prd_file: drills/prd_boss_closure.md
+  - id: node_oop_architecture
+    name: Object-Oriented Architecture
+    prerequisites:
+    - node_functional_scoping
+    drills:
+    - id: kata_oop_01
+      type: kata
+      description: The Shared State Bug.
+      exercise_file: drills/ex_oop_01.py
+      test_file: drills/test_oop_01.py
+      prd_file: drills/playbook_kata_oop_01.md
+    - id: kata_oop_02
+      type: kata
+      description: Internal Method Dispatch.
+      exercise_file: drills/ex_oop_02.py
+      test_file: drills/test_oop_02.py
+      prd_file: drills/playbook_kata_oop_02.md
+    - id: kata_oop_03
+      type: kata
+      description: Pointer Equality vs Value Equality.
+      exercise_file: drills/ex_oop_03.py
+      test_file: drills/test_oop_03.py
+      prd_file: drills/playbook_kata_oop_03.md
+    - id: kata_oop_04
+      type: kata
+      description: Clean Representations.
+      exercise_file: drills/ex_oop_04.py
+      test_file: drills/test_oop_04.py
+      prd_file: drills/playbook_kata_oop_04.md
+    - id: boss_token
+      type: boss_fight
+      description: The Token Primitive.
+      exercise_file: drills/boss_token.py
+      test_file: drills/test_boss_token.py
+      prd_file: drills/prd_boss_token.md
+    - id: boss_buffer
+      type: boss_fight
+      description: The Enforced Buffer.
+      exercise_file: drills/boss_buffer.py
+      test_file: drills/test_boss_buffer.py
+      prd_file: drills/prd_boss_buffer.md
+  - id: node_error_resiliency
+    name: Error Resiliency
+    prerequisites:
+    - node_oop_architecture
+    drills:
+    - id: kata_error_01
+      type: kata
+      description: The Unhandled Exception.
+      exercise_file: drills/ex_error_01.py
+      test_file: drills/test_error_01.py
+      prd_file: drills/playbook_kata_error_01.md
+    - id: kata_error_02
+      type: kata
+      description: The Finally Block.
+      exercise_file: drills/ex_error_02.py
+      test_file: drills/test_error_02.py
+      prd_file: drills/playbook_kata_error_02.md
+    - id: boss_custom_error
+      type: boss_fight
+      description: Custom Domain Exceptions.
+      exercise_file: drills/boss_custom_error.py
+      test_file: drills/test_boss_custom_error.py
+      prd_file: drills/prd_boss_custom_error.md
+- id: tier_2_math
+  name: 'Tier 3: Vector Math & Probability Primitives'
+  description: Building the mathematical foundation of AI from standard lists.
+  nodes:
+  - id: node_1d_vectors
+    name: 1D Vector Operations
+    prerequisites:
+    - node_error_resiliency
+    drills:
+    - id: kata_vec_01
+      type: kata
+      description: Vector Addition & Scalar Multiplication.
+      exercise_file: drills/ex_vector_01.py
+      test_file: drills/test_vector_01.py
+      prd_file: drills/playbook_kata_vec_01.md
+    - id: kata_vec_02
+      type: kata
+      description: Element-wise Hadamard Product.
+      exercise_file: drills/ex_vector_02.py
+      test_file: drills/test_vector_02.py
+      prd_file: drills/playbook_kata_vec_02.md
+    - id: kata_vec_03
+      type: kata
+      description: The Dot Product.
+      exercise_file: drills/ex_vector_03.py
+      test_file: drills/test_vector_03.py
+      prd_file: drills/playbook_kata_vec_03.md
+    - id: kata_vec_04
+      type: kata
+      description: Pure Euclidean Distance.
+      exercise_file: drills/ex_vector_04.py
+      test_file: drills/test_vector_04.py
+      prd_file: drills/playbook_kata_vec_04.md
+    - id: kata_vec_05
+      type: kata
+      description: Vector Normalization.
+      exercise_file: drills/ex_vector_05.py
+      test_file: drills/test_vector_05.py
+      prd_file: drills/playbook_kata_vec_05.md
+    - id: boss_nearest_neighbor
+      type: boss_fight
+      description: Nearest Neighbor Search.
+      exercise_file: drills/boss_nearest_neighbor.py
+      test_file: drills/test_boss_nearest_neighbor.py
+      prd_file: drills/prd_boss_nearest_neighbor.md
+    - id: boss_transpose
+      type: boss_fight
+      description: Matrix Transposition.
+      exercise_file: drills/boss_transpose.py
+      test_file: drills/test_boss_transpose.py
+      prd_file: drills/prd_boss_transpose.md
+  - id: node_probability
+    name: Probability, Logits & Exponentials
+    prerequisites:
+    - node_1d_vectors
+    drills:
+    - id: kata_prob_01
+      type: kata
+      description: Softmax with Temperature Scaling.
+      exercise_file: drills/ex_prob_01.py
+      test_file: drills/test_prob_01.py
+      prd_file: drills/playbook_kata_prob_01.md
+    - id: kata_prob_02
+      type: kata
+      description: Softmax Numerical Stability.
+      exercise_file: drills/ex_prob_02.py
+      test_file: drills/test_prob_02.py
+      prd_file: drills/playbook_kata_prob_02.md
+    - id: kata_prob_03
+      type: kata
+      description: Top-K Extraction & Logit Masking.
+      exercise_file: drills/ex_prob_03.py
+      test_file: drills/test_prob_03.py
+      prd_file: drills/playbook_kata_prob_03.md
+    - id: boss_argmax
+      type: boss_fight
+      description: Greedy Sampling (Argmax).
+      exercise_file: drills/boss_argmax.py
+      test_file: drills/test_boss_argmax.py
+      prd_file: drills/prd_boss_argmax.md
+- id: tier_3_ai_engine
+  name: 'Tier 4: Tokenizers & Neural Attention Engines'
+  description: 'GenAI mechanics: Tokenization, Attention, and Vector Projection.'
+  nodes:
+  - id: node_bpe_tokenizer
+    name: Byte-Pair Encoding (BPE) Tokenization
+    prerequisites:
+    - node_probability
+    drills:
+    - id: kata_bpe_01
+      type: kata
+      description: The String to Byte Translation.
+      exercise_file: drills/ex_bpe_01.py
+      test_file: drills/test_bpe_01.py
+      prd_file: drills/playbook_kata_bpe_01.md
+    - id: kata_bpe_02
+      type: kata
+      description: Subword Frequencies & BPE Concept.
+      exercise_file: drills/ex_bpe_02.py
+      test_file: drills/test_bpe_02.py
+      prd_file: drills/playbook_kata_bpe_02.md
+    - id: kata_bpe_03
+      type: kata
+      description: Merging Token Pairs.
+      exercise_file: drills/ex_bpe_03.py
+      test_file: drills/test_bpe_03.py
+      prd_file: drills/playbook_kata_bpe_03.md
+    - id: boss_bpe
+      type: boss_fight
+      description: BPE Vocabulary Generation.
+      exercise_file: drills/boss_bpe.py
+      test_file: drills/test_boss_bpe.py
+      prd_file: drills/prd_boss_bpe.md
+  - id: node_vector_embeddings
+    name: High-Dimensional Vector Embeddings
+    prerequisites:
+    - node_bpe_tokenizer
+    drills:
+    - id: kata_embed_01
+      type: kata
+      description: Cosine Similarity.
+      exercise_file: drills/ex_embed_01.py
+      test_file: drills/test_embed_01.py
+      prd_file: drills/playbook_kata_embed_01.md
+    - id: kata_embed_02
+      type: kata
+      description: Mini-Search Engine.
+      exercise_file: drills/ex_embed_02.py
+      test_file: drills/test_embed_02.py
+      prd_file: drills/playbook_kata_embed_02.md
+    - id: boss_numpy
+      type: boss_fight
+      description: The Big O Bottleneck Challenge (Vectorized NumPy).
+      exercise_file: drills/boss_numpy.py
+      test_file: drills/test_boss_numpy.py
+      prd_file: drills/prd_boss_numpy.md
+  - id: node_memory_engines
+    name: The Stateless Memory Engine
+    prerequisites:
+    - node_vector_embeddings
+    drills:
+    - id: kata_mem_00_slicing
+      type: kata
+      description: List Slicing Mechanics.
+      exercise_file: drills/ex_mem_00.py
+      test_file: drills/test_mem_00.py
+      prd_file: drills/playbook_kata_mem_00_slicing.md
+    - id: kata_mem_01
+      type: kata
+      description: FIFO Queue Eviction.
+      exercise_file: drills/ex_mem_01.py
+      test_file: drills/test_ex_mem_01.py
+      prd_file: drills/playbook_kata_mem_01.md
+    - id: kata_mem_02
+      type: kata
+      description: Conditional Mutation (Locking Index 0).
+      exercise_file: drills/ex_mem_02.py
+      test_file: drills/test_ex_mem_02.py
+      prd_file: drills/playbook_kata_mem_02.md
+    - id: kata_mem_03
+      type: kata
+      description: Capacity Evaluation (Pre-Bound Eviction).
+      exercise_file: drills/ex_mem_03.py
+      test_file: drills/test_ex_mem_03.py
+      prd_file: drills/playbook_kata_mem_03.md
+    - id: boss_sliding_window
+      type: boss_fight
+      description: The Sliding Context Window.
+      exercise_file: drills/boss_sliding_window.py
+      test_file: drills/test_boss_sliding_window.py
+      prd_file: drills/prd_boss_sliding_window.md
+  - id: node_tool_calling
+    name: Tool Calling & Schemas
+    prerequisites:
+    - node_memory_engines
+    drills:
+    - id: boss_schema_parser
+      type: boss_fight
+      description: Signature-to-Schema Parser.
+      exercise_file: drills/boss_schema_parser.py
+      test_file: drills/test_boss_schema_parser.py
+      prd_file: drills/prd_boss_schema_parser.md
+  - id: node_attention_mechanics
+    name: Scaled Dot-Product Attention
+    prerequisites:
+    - node_tool_calling
+    drills:
+    - id: kata_attn_01
+      type: kata
+      description: The Vanishing Gradient (Score Scaling).
+      exercise_file: drills/ex_attn_01.py
+      test_file: drills/test_attn_01.py
+      prd_file: drills/playbook_kata_attn_01.md
+    - id: boss_attention
+      type: boss_fight
+      description: Scaled Dot-Product Attention Engine.
+      exercise_file: drills/boss_attention.py
+      test_file: drills/test_boss_attention.py
+      prd_file: drills/prd_boss_attention.md
+- id: tier_4_syndicate
+  name: 'Tier 5: OpenForge Multi-Agent Architectures'
+  description: Multi-agent pipelines, memory engines, and rigorous testing.
+  nodes:
+  - id: node_evaluation_harness
+    name: Agentic Evaluation Discovery Lab
+    prerequisites:
+    - node_attention_mechanics
+    drills:
+    - id: boss_schema_validator
+      type: boss_fight
+      description: Strict JSON Schema Validator.
+      exercise_file: drills/boss_schema_validator.py
+      test_file: drills/test_boss_schema_validator.py
+      prd_file: drills/prd_boss_schema_validator.md
+    - id: boss_trajectory_auditor
+      type: boss_fight
+      description: Trajectory Auditor.
+      exercise_file: drills/boss_trajectory_auditor.py
+      test_file: drills/test_boss_trajectory_auditor.py
+      prd_file: drills/prd_boss_trajectory_auditor.md
+  - id: node_state_machines
+    name: Pure-Python State Machines
+    prerequisites:
+    - node_evaluation_harness
+    drills:
+    - id: boss_state_router
+      type: boss_fight
+      description: State Machine Router.
+      exercise_file: drills/boss_state_router.py
+      test_file: drills/test_boss_state_router.py
+      prd_file: drills/prd_boss_state_router.md
+  - id: node_rag_systems
+    name: The Local RAG Engine
+    prerequisites:
+    - node_state_machines
+    drills:
+    - id: boss_chunker
+      type: boss_fight
+      description: Token-Overlapping Chunker.
+      exercise_file: drills/boss_chunker.py
+      test_file: drills/test_boss_chunker.py
+      prd_file: drills/prd_boss_chunker.md
+  - id: node_local_quantization
+    name: Bare Metal Apple Silicon (Quantization)
+    prerequisites:
+    - node_rag_systems
+    drills:
+    - id: boss_quantization
+      type: boss_fight
+      description: 4-bit Min-Max Quantization.
+      exercise_file: drills/boss_quantization.py
+      test_file: drills/test_boss_quantization.py
+      prd_file: drills/prd_boss_quantization.md
+  - id: node_agent_orchestration
+    name: The Multi-Agent OpenForge
+    prerequisites:
+    - node_local_quantization
+    drills:
+    - id: boss_healing_loop
+      type: boss_fight
+      description: Self-Correcting Execution Loops.
+      exercise_file: drills/boss_healing_loop.py
+      test_file: drills/test_boss_healing_loop.py
+      prd_file: drills/prd_boss_healing_loop.md

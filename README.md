@@ -1,11 +1,11 @@
-# Syndicate 3.0: Native macOS Socratic IDE
+# OpenForge: Native macOS Socratic IDE
 
-Syndicate 3.0 is a premium, standalone, local-first macOS application designed as an AI-powered Socratic IDE for learning Generative AI and Python from first principles. Built natively in **SwiftUI** and powered by local, metal-accelerated **Ollama** models and **ChromaDB**, the app runs completely bare-metal and **100% offline**, allowing developers to study and write code on a plane or without an internet connection.
+OpenForge is a premium, standalone, local-first macOS application designed as an AI-powered Socratic IDE for learning Generative AI and Python from first principles. Built natively in **SwiftUI** and powered by local, metal-accelerated **Ollama** models and **ChromaDB**, the app runs completely bare-metal and **100% offline**, allowing developers to study and write code on a plane or without an internet connection.
 
 ---
 
 ## 🧭 The Vision
-Rather than an external, noisy browser chat panel, Syndicate embeds your Socratic mentor—**Carl**—directly inside a highly responsive, custom-tailored macOS desktop workspace. 
+Rather than an external, noisy browser chat panel, OpenForge embeds your Socratic mentor—**Carl**—directly inside a highly responsive, custom-tailored macOS desktop workspace. 
 
 Carl acts as a peer programmer who **never** hands out ready solution code. Instead, he guides you Socratically by analyzing your tracebacks, raising core algorithmic questions, suggesting conceptual "naive attempts", and tracking your recurring struggles and milestones inside a persistent local memory ledger.
 
@@ -67,8 +67,8 @@ swift run
 To open and run inside Xcode:
 1. Open the project folder in Xcode:
    ```bash
-   open Syndicate.xcodeproj
+   open OpenForge.xcodeproj
    ```
 2. Press **`Cmd + R`** (or click **Play**) to compile, run, and attach the Xcode debugger.
 
-*(Note: macOS App Sandboxing is strictly disabled in `Syndicate.entitlements` to allow direct execution of your workspace `.venv/bin/python` interpreter and read-access to your local RAG directories).*
+*(Note: macOS App Sandboxing is strictly disabled in `OpenForge.entitlements` to allow direct execution of your workspace `.venv/bin/python` interpreter and read-access to your local RAG directories).*

@@ -11,9 +11,20 @@ struct ForgeEditorView: View {
         VSplitView {
             // Upper Panel: Discovery Lab Bento Card (Dynamic Theme)
             VStack(spacing: 0) {
-                BentoPanel(title: "Discovery Playbook", systemIcon: "safari.fill", activeTheme: viewModel.activeTheme) {
-                    if viewModel.activeContent != nil {
-                        MarkdownWebView(markdown: viewModel.activeContent?.markdown ?? "")
+                let isBossFight = (viewModel.activeContent?.exercises.count ?? 0) > viewModel.selectedExerciseIndex && viewModel.activeContent?.exercises[viewModel.selectedExerciseIndex].type == "boss_fight"
+                
+                BentoPanel(title: isBossFight ? "Product Requirements (Boss Fight)" : "Discovery Playbook", systemIcon: isBossFight ? "exclamationmark.triangle.fill" : "safari.fill", activeTheme: viewModel.activeTheme) {
+                    if let content = viewModel.activeContent {
+                        if viewModel.selectedExerciseIndex < content.exercises.count {
+                            let activeEx = content.exercises[viewModel.selectedExerciseIndex]
+                            if let prd = activeEx.prd_markdown {
+                                MarkdownWebView(markdown: prd)
+                            } else {
+                                MarkdownWebView(markdown: content.markdown)
+                            }
+                        } else {
+                            MarkdownWebView(markdown: content.markdown)
+                        }
                     } else {
                         VStack(spacing: 12) {
                             Spacer()
@@ -241,6 +252,7 @@ struct ForgeEditorView: View {
         let payload: [String: String] = ["lesson": lessonId]
         request.httpBody = try? JSONEncoder().encode(payload)
         
+        // Fire and forget. The StateReceiver will handle the UI update via EventBus
         _ = try? await URLSession.shared.data(for: request)
     }
 }

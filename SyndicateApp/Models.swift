@@ -84,6 +84,10 @@ struct Lesson: Identifiable, Codable, Hashable {
 struct Exercise: Codable, Hashable {
     let starter_code: String
     let assertions: String
+    let id: String?
+    let description: String?
+    let type: String?
+    let prd_markdown: String?
 }
 
 struct LessonContent: Codable, Hashable {
@@ -122,6 +126,7 @@ class SyllabusViewModel: ObservableObject {
         didSet {
             if !isInitialLoading {
                 codeDidChange(to: activeCode)
+                saveActiveCodeToCache()
             }
         }
     }
@@ -146,7 +151,7 @@ class SyllabusViewModel: ObservableObject {
     private let fileWatcher = FileWatcher()
     private var saveTask: Task<Void, Never>? = nil
     private var isInitialLoading: Bool = false
-    private let workspacePath = "/Users/justin/python-ai-academy"
+    private let workspacePath = NSHomeDirectory() + "/python-ai-academy"
     
     init() {
         // Restore last selected theme on boot
@@ -220,7 +225,7 @@ class SyllabusViewModel: ObservableObject {
             self.isInitialLoading = true
             self.selectedExerciseIndex = 0
             if let firstExercise = content.exercises.first {
-                let starter = firstExercise.starter_code
+                let starter = getCachedCode(lessonId: lesson.id, exerciseIndex: 0) ?? firstExercise.starter_code
                 self.activeCode = starter
                 
                 // Asynchronously write active_lab.py to disk (non-blocking I/O)
@@ -257,7 +262,7 @@ class SyllabusViewModel: ObservableObject {
         self.selectedExerciseIndex = index
         self.isInitialLoading = true
         
-        let starter = content.exercises[index].starter_code
+        let starter = getCachedCode(lessonId: selectedLesson?.id ?? "", exerciseIndex: index) ?? content.exercises[index].starter_code
         self.activeCode = starter
         
         // Write selected exercise code to active_lab.py
@@ -288,6 +293,21 @@ class SyllabusViewModel: ObservableObject {
         DispatchQueue.global(qos: .background).async {
             try? code.write(toFile: activeLabPath, atomically: true, encoding: .utf8)
         }
+    }
+    
+    private func saveActiveCodeToCache() {
+        guard let lesson = selectedLesson else { return }
+        let key = "\(lesson.id)_\(selectedExerciseIndex)"
+        
+        var cache = UserDefaults.standard.dictionary(forKey: "syllabus_user_code_cache") as? [String: String] ?? [:]
+        cache[key] = activeCode
+        UserDefaults.standard.set(cache, forKey: "syllabus_user_code_cache")
+    }
+    
+    private func getCachedCode(lessonId: String, exerciseIndex: Int) -> String? {
+        let key = "\(lessonId)_\(exerciseIndex)"
+        let cache = UserDefaults.standard.dictionary(forKey: "syllabus_user_code_cache") as? [String: String] ?? [:]
+        return cache[key]
     }
     
     // MARK: - File Watcher Handler
@@ -358,7 +378,7 @@ class ChatViewModel: ObservableObject {
         }
     }
     
-    private let workspacePath = "/Users/justin/python-ai-academy"
+    private let workspacePath = NSHomeDirectory() + "/python-ai-academy"
     private var memoryText: String = ""
     
     init() {
@@ -465,7 +485,7 @@ class ChatViewModel: ObservableObject {
         
         // 3. Build Socratic prompt guidelines
         let systemPrompt = """
-        You are Carl, a brilliant, helpful Socratic tutor guiding an adult developer through the Syndicate 3.0 curriculum.
+        You are Carl, a brilliant, helpful Socratic tutor guiding an adult developer through the OpenForge curriculum.
         Your primary directive: NEVER give out direct solution code!
         Instead, help them understand the physics of what they are doing by asking targeted questions, analyzing their tracebacks, or suggesting conceptual naive attempts.
         Keep your responses short, concise, and focused. You are a peer-programmer and mentor.

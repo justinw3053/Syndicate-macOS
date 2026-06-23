@@ -2,11 +2,13 @@ import os
 import sys
 import threading
 from datetime import datetime
+from backend.event_bus import EventBus
 
 # Dynamically resolve memory path to the .pi/memory.txt file in the workspace
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEMORY_PATH = os.path.join(BASE_DIR, '.pi', 'memory.txt')
 _lock = threading.Lock()
+bus = EventBus()
 
 def _ensure_dir():
     os.makedirs(os.path.dirname(MEMORY_PATH), exist_ok=True)
@@ -25,6 +27,8 @@ def update_progress(lesson_name):
             try:
                 import tracker
                 tracker.update_progress(lesson_name)
+                # Publish state change via UDF Event Bus
+                bus.publish("lessonCompleted", {"lessonId": lesson_name})
                 return True
             except Exception:
                 pass
@@ -38,4 +42,7 @@ def update_progress(lesson_name):
         if lesson_name not in content:
             with open(MEMORY_PATH, 'a', encoding='utf-8') as f:
                 f.write(f"\nCompleted: {lesson_name} at {datetime.now().isoformat()}")
+        
+        # Publish state change via UDF Event Bus
+        bus.publish("lessonCompleted", {"lessonId": lesson_name})
         return True

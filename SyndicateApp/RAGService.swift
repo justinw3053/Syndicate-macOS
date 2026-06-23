@@ -66,14 +66,25 @@ class RAGService: ObservableObject {
         }
     }
     
+    private var workspacePath: String {
+        return NSHomeDirectory() + "/python-ai-academy"
+    }
+    
     private func spawnPythonDaemon(port: UInt16) {
         let process = Process()
         self.process = process
         
-        process.executableURL = URL(fileURLWithPath: "/Users/justin/python-ai-academy/.venv/bin/python")
-        // CRITICAL FIX: Pass absolute script path to guarantee successful boot from Xcode DerivedData
-        process.arguments = ["/Users/justin/python-ai-academy/backend/rag_daemon.py", String(port)]
-        process.currentDirectoryURL = URL(fileURLWithPath: "/Users/justin/python-ai-academy")
+        var finalPythonPath = "\(workspacePath)/.venv/bin/python"
+        if let resourceURL = Bundle.main.resourceURL {
+            let pythonPath = resourceURL.appendingPathComponent("python_runtime/bin/python3").path
+            if FileManager.default.fileExists(atPath: pythonPath) {
+                finalPythonPath = pythonPath
+            }
+        }
+        
+        process.executableURL = URL(fileURLWithPath: finalPythonPath)
+        process.arguments = ["\(workspacePath)/backend/rag_daemon.py", String(port)]
+        process.currentDirectoryURL = URL(fileURLWithPath: workspacePath)
         
         var environment = ProcessInfo.processInfo.environment
         environment["PYTHONUNBUFFERED"] = "1"
@@ -91,14 +102,21 @@ class RAGService: ObservableObject {
         let process = Process()
         self.flaskProcess = process
         
-        process.executableURL = URL(fileURLWithPath: "/Users/justin/python-ai-academy/.venv/bin/python")
-        // CRITICAL FIX: Pass absolute script path to guarantee successful boot from Xcode DerivedData
-        process.arguments = ["-u", "/Users/justin/python-ai-academy/backend/main.py"]
-        process.currentDirectoryURL = URL(fileURLWithPath: "/Users/justin/python-ai-academy")
+        var finalPythonPath = "\(workspacePath)/.venv/bin/python"
+        if let resourceURL = Bundle.main.resourceURL {
+            let pythonPath = resourceURL.appendingPathComponent("python_runtime/bin/python3").path
+            if FileManager.default.fileExists(atPath: pythonPath) {
+                finalPythonPath = pythonPath
+            }
+        }
+        
+        process.executableURL = URL(fileURLWithPath: finalPythonPath)
+        process.arguments = ["-u", "\(workspacePath)/backend/main.py"]
+        process.currentDirectoryURL = URL(fileURLWithPath: workspacePath)
         
         var environment = ProcessInfo.processInfo.environment
         environment["PYTHONUNBUFFERED"] = "1"
-        environment["PYTHONPATH"] = "/Users/justin/python-ai-academy"
+        environment["PYTHONPATH"] = workspacePath
         process.environment = environment
         
         do {

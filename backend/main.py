@@ -6,6 +6,8 @@ from flask import Flask, jsonify, send_from_directory, request, Response
 import backend.state_manager as state_manager
 import backend.llm_bridge as llm_bridge
 import backend.content_engine as content_engine
+from backend.event_bus import EventBus
+import queue
 
 def orphan_watchdog():
     """Background watchdog thread that terminates the Flask server if the parent Swift app exits."""
@@ -85,3 +87,27 @@ def create_app(test_config=None):
 if __name__ == '__main__':
     app = create_app()
     app.run(threaded=True, host='127.0.0.1', port=5050)
+
+    @app.route('/api/events')
+    def events():
+        def event_stream():
+            q = queue.Queue()
+            
+            def on_event(event_data):
+                q.put(event_data)
+                
+            bus = EventBus()
+            bus.subscribe(on_event)
+            
+            try:
+                while True:
+                    # Block until an event is published
+                    event_data = q.get()
+                    yield f"data: {event_data}\n\n"
+            except GeneratorExit:
+                # Clean up if client disconnects
+                with bus.state_lock:
+                    if on_event in bus.subscribers:
+                        bus.subscribers.remove(on_event)
+        
+        return Response(event_stream(), mimetype='text/event-stream')

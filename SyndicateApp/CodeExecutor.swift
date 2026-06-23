@@ -1,174 +1,199 @@
 import Foundation
+import Network
 import Darwin
 
 class CodeExecutor {
-    private var process: Process?
-    private var watchdogItem: DispatchWorkItem?
+    private var daemonProcess: Process?
+    private var listener: NWListener?
+    private var connection: NWConnection?
+    
+    private var tcpBuffer: String = ""
     private var isCompleted = false
     private let lock = NSLock()
     
-    /// Executes the student's code concatenated with assertions inside a dedicated process group.
-    /// Runs asynchronously on a background thread and streams merged stdout/stderr back to the caller.
-    func execute(
-        code: String,
-        assertions: String,
-        workspacePath: String = "/Users/justin/python-ai-academy",
-        onOutput: @escaping (String) -> Void,
-        onCompletion: @escaping (Bool) -> Void
-    ) {
-        lock.lock()
-        // Cancel any existing running processes first and reset completed latch
-        terminateActiveProcess()
-        self.isCompleted = false
-        lock.unlock()
-        
-        let activeLabPath = "\(workspacePath)/active_lab.py"
-        let verifyLabPath = "\(workspacePath)/verify_lab.py"
-        let pythonInterpreterPath = "\(workspacePath)/.venv/bin/python"
-        
-        // 1. Write student's code to active_lab.py
+    private var onOutputCallback: ((String) -> Void)?
+    private var onCompletionCallback: ((Bool) -> Void)?
+    private var currentReqId = 1
+    private var pendingRequestData: Data? = nil
+    
+    init() {
+        startTCPServerAndSpawnDaemon()
+    }
+    
+    private func startTCPServerAndSpawnDaemon() {
         do {
-            try code.write(toFile: activeLabPath, atomically: true, encoding: .utf8)
+            // Bind to ephemeral port for internal IPC routing
+            listener = try NWListener(using: .tcp, on: .any)
+            listener?.stateUpdateHandler = { [weak self] state in
+                guard let self = self else { return }
+                if case .ready = state, let port = self.listener?.port {
+                    self.spawnPythonDaemon(port: port.rawValue)
+                }
+            }
+            listener?.newConnectionHandler = { [weak self] newConnection in
+                guard let self = self else { return }
+                self.connection = newConnection
+                self.connection?.stateUpdateHandler = { state in
+                    if case .ready = state {
+                        self.receiveNextMessage()
+                        self.sendPendingRequest()
+                    }
+                }
+                self.connection?.start(queue: .global(qos: .userInteractive))
+            }
+            listener?.start(queue: .global(qos: .userInitiated))
         } catch {
-            onOutput("Error: Failed to write active_lab.py to workspace.\n")
-            triggerCompletion(false, onCompletion: onCompletion)
-            return
+            print("Failed to initialize execution daemon TCP server.")
         }
-        
-        // 2. Construct the verify_lab.py script containing user code + assertions
-        let mergedCode = """
-# -*- coding: utf-8 -*-
-import sys
-import os
-
-# Ensure .pi is in sys.path so progress tracking works natively
-pi_path = os.path.join("\(workspacePath)", ".pi")
-if pi_path not in sys.path:
-    sys.path.append(pi_path)
-
-# --- Student Code ---
-\(code)
-
-# --- Hidden Assertions ---
-\(assertions)
-"""
-        do {
-            try mergedCode.write(toFile: verifyLabPath, atomically: true, encoding: .utf8)
-        } catch {
-            onOutput("Error: Failed to write verify_lab.py to workspace.\n")
-            triggerCompletion(false, onCompletion: onCompletion)
-            return
-        }
-        
-        // 3. Configure the Process
+    }
+    
+    private func spawnPythonDaemon(port: UInt16) {
         let process = Process()
-        self.process = process
+        self.daemonProcess = process
         
-        process.executableURL = URL(fileURLWithPath: pythonInterpreterPath)
-        process.arguments = ["-u", verifyLabPath]
+        let workspacePath = NSHomeDirectory() + "/python-ai-academy"
+        
+        // Use the hermetic Python environment packaged inside the app bundle
+        var finalPythonPath = "\(workspacePath)/.venv/bin/python"
+        if let resourceURL = Bundle.main.resourceURL {
+            let pythonPath = resourceURL.appendingPathComponent("python_runtime/bin/python3").path
+            if FileManager.default.fileExists(atPath: pythonPath) {
+                finalPythonPath = pythonPath
+            }
+        }
+            
+        process.executableURL = URL(fileURLWithPath: finalPythonPath)
+        process.arguments = ["\(workspacePath)/backend/code_execution_daemon.py", String(port)]
         process.currentDirectoryURL = URL(fileURLWithPath: workspacePath)
         
         var environment = ProcessInfo.processInfo.environment
         environment["PYTHONUNBUFFERED"] = "1"
-        environment["PYTHONPATH"] = "\(workspacePath):\(workspacePath)/.pi"
         process.environment = environment
         
-        // 4. Create the I/O Pipes
-        let outputPipe = Pipe()
-        process.standardOutput = outputPipe
-        // Merge standard error into standard output at the OS level for perfect chronological ordering
-        process.standardError = outputPipe
-        
-        let readHandle = outputPipe.fileHandleForReading
-        
-        readHandle.readabilityHandler = { handle in
-            let data = handle.availableData
-            if data.isEmpty {
-                handle.readabilityHandler = nil
-                return
-            }
-            if let outputString = String(data: data, encoding: .utf8) {
-                onOutput(outputString)
-            }
-        }
-        
-        // 5. Start the execution
         do {
             try process.run()
-            
             // Create a separate process group
             let pid = process.processIdentifier
             setpgid(pid, pid)
-            
         } catch {
-            onOutput("Error: Failed to spawn Python interpreter subprocess. Verify your virtual environment.\n")
-            triggerCompletion(false, onCompletion: onCompletion)
-            return
+            print("Failed to spawn Python Exec daemon.")
         }
+    }
+    
+    private func receiveNextMessage() {
+        connection?.receive(minimumIncompleteLength: 1, maximumLength: 65536) { [weak self] (data, _, isComplete, error) in
+            guard let self = self else { return }
+            if let data = data, !data.isEmpty {
+                self.processIncomingData(data)
+            }
+            if !isComplete && error == nil {
+                self.receiveNextMessage()
+            }
+        }
+    }
+    
+    private func processIncomingData(_ data: Data) {
+        guard let stringChunk = String(data: data, encoding: .utf8) else { return }
+        tcpBuffer += stringChunk
         
-        // 6. Set up the 5-Second Watchdog Timer
-        let watchdog = DispatchWorkItem { [weak self, weak process] in
-            guard let self = self, let activeProcess = process, activeProcess.isRunning else { return }
+        // Process complete JSON-RPC messages framed by newline
+        while let newlineIndex = tcpBuffer.firstIndex(of: "\n") {
+            let line = String(tcpBuffer[..<newlineIndex]).trimmingCharacters(in: .whitespacesAndNewlines)
+            tcpBuffer = String(tcpBuffer[tcpBuffer.index(after: newlineIndex)...])
             
-            let pid = activeProcess.processIdentifier
+            if line.isEmpty { continue }
+            guard let lineData = line.data(using: .utf8),
+                  let json = try? JSONSerialization.jsonObject(with: lineData, options: []) as? [String: Any] else {
+                continue
+            }
             
-            // Send SIGTERM to the entire negative process group ID to cleanly stop parents and children
-            Darwin.kill(-pid, SIGTERM)
-            onOutput("\n[TIMEOUT] CPU limit exceeded. Terminating loop hierarchy (SIGTERM)...\n")
-            
-            // Wait 500ms and send SIGKILL to guarantee absolute destruction
-            DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
-                if activeProcess.isRunning {
-                    Darwin.kill(-pid, SIGKILL)
-                    onOutput("[TIMEOUT] Force killed (SIGKILL) unresponsive process group.\n")
+            if let output = json["output"] as? String {
+                DispatchQueue.main.async {
+                    self.onOutputCallback?(output)
                 }
             }
             
-            self.triggerCompletion(false, onCompletion: onCompletion)
-        }
-        self.watchdogItem = watchdog
-        DispatchQueue.global().asyncAfter(deadline: .now() + 5.0, execute: watchdog)
-        
-        // 7. Monitor process completion
-        process.terminationHandler = { [weak self] completedProcess in
-            guard let self = self else { return }
-            
-            lock.lock()
-            self.watchdogItem?.cancel()
-            self.watchdogItem = nil
-            lock.unlock()
-            
-            try? FileManager.default.removeItem(atPath: verifyLabPath)
-            
-            let exitCode = completedProcess.terminationStatus
-            let success = (exitCode == 0)
-            
-            self.triggerCompletion(success, onCompletion: onCompletion)
+            if let done = json["done"] as? Bool, done, let success = json["success"] as? Bool {
+                triggerCompletion(success)
+            }
         }
     }
     
-    private func triggerCompletion(_ success: Bool, onCompletion: @escaping (Bool) -> Void) {
+    private func sendPendingRequest() {
         lock.lock()
         defer { lock.unlock() }
-        
-        guard !isCompleted else { return }
-        isCompleted = true
-        onCompletion(success)
+        if let data = pendingRequestData, connection?.state == .ready {
+            connection?.send(content: data, completion: .contentProcessed({ _ in }))
+            pendingRequestData = nil
+        }
     }
     
-    /// Forcefully terminates any currently active process and cancels its watchdog.
-    func terminateActiveProcess() {
-        watchdogItem?.cancel()
-        watchdogItem = nil
+    /// Executes the student's code asynchronously via the JSON-RPC daemon.
+    func execute(
+        code: String,
+        assertions: String,
+        workspacePath: String = NSHomeDirectory() + "/python-ai-academy",
+        onOutput: @escaping (String) -> Void,
+        onCompletion: @escaping (Bool) -> Void
+    ) {
+        lock.lock()
+        self.onOutputCallback = onOutput
+        self.onCompletionCallback = onCompletion
+        self.isCompleted = false
+        self.currentReqId += 1
+        let reqId = self.currentReqId
+        lock.unlock()
         
-        if let activeProcess = process, activeProcess.isRunning {
-            let pid = activeProcess.processIdentifier
-            Darwin.kill(-pid, SIGKILL)
-            process = nil
+        let request: [String: Any] = [
+            "jsonrpc": "2.0",
+            "method": "execute",
+            "params": [
+                "code": code,
+                "assertions": assertions,
+                "workspacePath": workspacePath
+            ],
+            "id": reqId
+        ]
+        
+        guard let requestData = try? JSONSerialization.data(withJSONObject: request, options: []),
+              let requestString = String(data: requestData, encoding: .utf8),
+              let finalData = (requestString + "\n").data(using: .utf8) else {
+            onOutput("Error: Failed to serialize JSON-RPC execution request.\n")
+            triggerCompletion(false)
+            return
         }
+        
+        lock.lock()
+        pendingRequestData = finalData
+        lock.unlock()
+        
+        sendPendingRequest()
+    }
+    
+    private func triggerCompletion(_ success: Bool) {
+        lock.lock()
+        defer { lock.unlock() }
+        guard !isCompleted else { return }
+        isCompleted = true
+        DispatchQueue.main.async {
+            self.onCompletionCallback?(success)
+        }
+    }
+    
+    /// Severs the callback hooks for the active execution (effectively abandoning it).
+    func terminateActiveProcess() {
+        lock.lock()
+        self.onOutputCallback = nil
+        self.onCompletionCallback = nil
+        lock.unlock()
     }
     
     deinit {
-        terminateActiveProcess()
+        connection?.cancel()
+        listener?.cancel()
+        if let activeProcess = daemonProcess, activeProcess.isRunning {
+            let pid = activeProcess.processIdentifier
+            Darwin.kill(-pid, SIGKILL)
+        }
     }
 }

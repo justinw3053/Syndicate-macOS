@@ -13,6 +13,8 @@ struct CommsArrayView: View {
     @State private var promptHistory: [String] = []
     @State private var historyIndex: Int = -1
     
+    @FocusState private var isInputFocused: Bool
+    
     var body: some View {
         VStack(spacing: 0) {
             // Header: Theme Selector & Model Selector
@@ -88,6 +90,7 @@ struct CommsArrayView: View {
                 TextField("Ask Carl about the physics...", text: $inputText, axis: .vertical)
                     .lineLimit(1...5)
                     .textFieldStyle(PlainTextFieldStyle())
+                    .focused($isInputFocused)
                     .padding(10)
                     .background(Color(NSColor.textBackgroundColor).opacity(0.45))
                     .cornerRadius(8)
@@ -135,6 +138,9 @@ struct CommsArrayView: View {
             }
             .padding(12)
             .background(Color.black.opacity(0.04))
+        }
+        .onTapGesture {
+            isInputFocused = true
         }
         .frame(minWidth: 340, maxWidth: 450)
         .overlay(

@@ -6,3 +6,5 @@ build/
 frontend/pyodide/
 node_modules/
 frontend/vs/
+
+ensemble_last_response.md
