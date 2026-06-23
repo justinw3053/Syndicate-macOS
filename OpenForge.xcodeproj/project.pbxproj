@@ -22,7 +22,7 @@
 		0b0b0b0b0b0b0b0b0b0b0b0b /* AnsiText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000b /* AnsiText.swift */; };
 		0c0c0c0c0c0c0c0c0c0c0c0c /* PythonCodeEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000c /* PythonCodeEditor.swift */; };
 		131313131313131313131313 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 121212121212121212121212 /* Assets.xcassets */; };
-		F1F1F1F1F1F1F1F1F1F1F1F1 /* SyndicateApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFFFFFFFFFFFFFFFFFFFFFF /* SyndicateApp.swift */; };
+		F1F1F1F1F1F1F1F1F1F1F1F1 /* OpenForgeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFFFFFFFFFFFFFFFFFFFFFF /* OpenForgeApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,8 +42,8 @@
 		00000000000000000000000c /* PythonCodeEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PythonCodeEditor.swift; sourceTree = "<group>"; };
 		090909090909090909090909 /* Syndicate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Syndicate.entitlements; sourceTree = "<group>"; };
 		121212121212121212121212 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		555555555555555555555555 /* Syndicate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Syndicate.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		FFFFFFFFFFFFFFFFFFFFFFFF /* SyndicateApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyndicateApp.swift; sourceTree = "<group>"; };
+		555555555555555555555555 /* OpenForge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenForge.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FFFFFFFFFFFFFFFFFFFFFFFF /* OpenForgeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenForgeApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,7 +60,7 @@
 		222222222222222222222222 = {
 			isa = PBXGroup;
 			children = (
-				999999999999999999999991 /* SyndicateApp */,
+				999999999999999999999991 /* OpenForgeApp */,
 				333333333333333333333333 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -68,17 +68,17 @@
 		333333333333333333333333 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				555555555555555555555555 /* Syndicate.app */,
+				555555555555555555555555 /* OpenForge.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		999999999999999999999991 /* SyndicateApp */ = {
+		999999999999999999999991 /* OpenForgeApp */ = {
 			isa = PBXGroup;
 			children = (
 				ABCD00020000000000000000 /* StateEvents.swift */,
 				ABCD00040000000000000000 /* StateReceiver.swift */,
-				FFFFFFFFFFFFFFFFFFFFFFFF /* SyndicateApp.swift */,
+				FFFFFFFFFFFFFFFFFFFFFFFF /* OpenForgeApp.swift */,
 				000000000000000000000000 /* ContentView.swift */,
 				000000000000000000000002 /* SyllabusSidebarView.swift */,
 				000000000000000000000003 /* ForgeEditorView.swift */,
@@ -93,7 +93,7 @@
 				121212121212121212121212 /* Assets.xcassets */,
 				090909090909090909090909 /* Syndicate.entitlements */,
 			);
-			path = SyndicateApp;
+			path = OpenForgeApp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -101,7 +101,7 @@
 /* Begin PBXNativeTarget section */
 		444444444444444444444444 /* Syndicate */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AAAAAAAAAAAAAAAAAAAAAAAA /* Build configuration list for PBXNativeTarget "Syndicate" */;
+			buildConfigurationList = AAAAAAAAAAAAAAAAAAAAAAAA /* Build configuration list for PBXNativeTarget "OpenForge" */;
 			buildPhases = (
 				666666666666666666666666 /* Sources */,
 				777777777777777777777777 /* Frameworks */,
@@ -112,9 +112,9 @@
 			);
 			dependencies = (
 			);
-			name = Syndicate;
-			productName = Syndicate;
-			productReference = 555555555555555555555555 /* Syndicate.app */;
+			name = OpenForge;
+			productName = OpenForge;
+			productReference = 555555555555555555555555 /* OpenForge.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -132,7 +132,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 999999999999999999999999 /* Build configuration list for PBXProject "Syndicate" */;
+			buildConfigurationList = 999999999999999999999999 /* Build configuration list for PBXProject "OpenForge" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -189,7 +189,7 @@
 			files = (
 				ABCD00010000000000000000 /* StateEvents.swift in Sources */,
 				ABCD00030000000000000000 /* StateReceiver.swift in Sources */,
-				F1F1F1F1F1F1F1F1F1F1F1F1 /* SyndicateApp.swift in Sources */,
+				F1F1F1F1F1F1F1F1F1F1F1F1 /* OpenForgeApp.swift in Sources */,
 				010101010101010101010101 /* ContentView.swift in Sources */,
 				020202020202020202020202 /* SyllabusSidebarView.swift in Sources */,
 				030303030303030303030303 /* ForgeEditorView.swift in Sources */,
@@ -327,7 +327,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = SyndicateApp/Syndicate.entitlements;
+				CODE_SIGN_ENTITLEMENTS = OpenForgeApp/OpenForge.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_ASSETS = "";
@@ -338,7 +338,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.justin.Syndicate;
+				PRODUCT_BUNDLE_IDENTIFIER = com.justin.OpenForge;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.9;
@@ -350,7 +350,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = SyndicateApp/Syndicate.entitlements;
+				CODE_SIGN_ENTITLEMENTS = OpenForgeApp/OpenForge.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_ASSETS = "";
@@ -361,7 +361,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.justin.Syndicate;
+				PRODUCT_BUNDLE_IDENTIFIER = com.justin.OpenForge;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.9;
@@ -371,7 +371,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		999999999999999999999999 /* Build configuration list for PBXProject "Syndicate" */ = {
+		999999999999999999999999 /* Build configuration list for PBXProject "OpenForge" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BBBBBBBBBBBBBBBBBBBBBBBB /* Debug */,
@@ -380,7 +380,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AAAAAAAAAAAAAAAAAAAAAAAA /* Build configuration list for PBXNativeTarget "Syndicate" */ = {
+		AAAAAAAAAAAAAAAAAAAAAAAA /* Build configuration list for PBXNativeTarget "OpenForge" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DDDDDDDDDDDDDDDDDDDDDDDD /* Debug */,

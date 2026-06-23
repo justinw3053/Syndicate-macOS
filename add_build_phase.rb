@@ -2,7 +2,7 @@
 
 require 'xcodeproj'
 
-project_path = 'Syndicate.xcodeproj'
+project_path = 'OpenForge.xcodeproj'
 project = Xcodeproj::Project.open(project_path)
 target = project.targets.first
 
