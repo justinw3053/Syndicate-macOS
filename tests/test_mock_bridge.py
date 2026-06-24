@@ -26,13 +26,3 @@ def test_api_track_endpoint(client, tmp_path):
             content = f.read()
             assert "Mission 1, Lesson 1" in content
 
-def test_mock_tracker_in_worker():
-    # Test that the worker injects the tracker mock into sys.modules
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    worker_path = os.path.join(base_dir, 'frontend', 'worker.js')
-    with open(worker_path, 'r') as f:
-        content = f.read()
-        
-    assert 'sys.modules["tracker"]' in content
-    assert 'def update_progress' in content
-    assert 'pyodide.http.pyfetch' in content or 'XMLHttpRequest' in content

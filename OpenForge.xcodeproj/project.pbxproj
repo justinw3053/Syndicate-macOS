@@ -40,7 +40,7 @@
 		00000000000000000000000a /* MarkdownWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownWebView.swift; sourceTree = "<group>"; };
 		00000000000000000000000b /* AnsiText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnsiText.swift; sourceTree = "<group>"; };
 		00000000000000000000000c /* PythonCodeEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PythonCodeEditor.swift; sourceTree = "<group>"; };
-		090909090909090909090909 /* Syndicate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Syndicate.entitlements; sourceTree = "<group>"; };
+		090909090909090909090909 /* OpenForge.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OpenForge.entitlements; sourceTree = "<group>"; };
 		121212121212121212121212 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		555555555555555555555555 /* OpenForge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenForge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFFFFFFFFFFFFFFFFFFFFFFF /* OpenForgeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenForgeApp.swift; sourceTree = "<group>"; };
@@ -91,7 +91,7 @@
 				00000000000000000000000b /* AnsiText.swift */,
 				00000000000000000000000c /* PythonCodeEditor.swift */,
 				121212121212121212121212 /* Assets.xcassets */,
-				090909090909090909090909 /* Syndicate.entitlements */,
+				090909090909090909090909 /* OpenForge.entitlements */,
 			);
 			path = OpenForgeApp;
 			sourceTree = "<group>";
