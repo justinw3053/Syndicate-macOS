@@ -607,8 +607,10 @@ class ChatViewModel: ObservableObject {
             DispatchQueue.global(qos: .background).async {
                 var content = (try? String(contentsOfFile: memoryPath, encoding: .utf8)) ?? ""
                 
+                let hasPersonalized = UserDefaults.standard.bool(forKey: "hasPersonalizedProfile")
+                
                 // Dynamically personalize the student profile if empty or still set to the default developer profile
-                if content.isEmpty || content.contains("STUDENT NAME: Justin") {
+                if !hasPersonalized || content.isEmpty {
                     let actualName = NSFullUserName().isEmpty ? "Developer" : NSFullUserName()
                     content = """
 STUDENT NAME: \(actualName)
@@ -618,6 +620,7 @@ NOTES:
 - Guide this student Socratically using analogies and targeted questions.
 """
                     try? content.write(toFile: memoryPath, atomically: true, encoding: .utf8)
+                    UserDefaults.standard.set(true, forKey: "hasPersonalizedProfile")
                 }
                 
                 continuation.resume(returning: content)
